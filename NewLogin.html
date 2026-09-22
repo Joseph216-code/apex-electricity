@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account</title>
+    <link rel="stylesheet" href="NewLogin.css" />
+    <!-- Changed from Login.css -->
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="logo">⚡</div>
+      <h1>Create Account</h1>
+      <p class="welcome-text">Join Apex today!</p>
+
+      <form id="signup-form">
+        <div class="input-group">
+          <label for="fullname">Full Name</label>
+          <input
+            type="text"
+            id="fullname"
+            placeholder="Enter your full name"
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="Enter your email"
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password</label>
+          <div class="password-box">
+            <input
+              type="password"
+              id="password"
+              placeholder="Create a password"
+              required
+            />
+            <button type="button" class="show-password" id="show-password">
+              👁️
+            </button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="confirm-password">Confirm Password</label>
+          <input
+            type="password"
+            id="confirm-password"
+            placeholder="Confirm your password"
+            required
+          />
+        </div>
+
+        <button type="submit" class="login-btn">Create Account</button>
+      </form>
+
+      <p class="signup-text">
+        Already have an account?
+        <a href="Login.html">Log In</a>
+      </p>
+    </div>
+
+    <!-- Custom Alert Box -->
+    <div class="alert-overlay" id="alert-overlay">
+      <div class="alert-box">
+        <div class="alert-icon" id="alert-icon">⚡</div>
+        <h2 id="alert-title">Message</h2>
+        <p id="alert-message"></p>
+        <button id="alert-button">OK</button>
+      </div>
+    </div>
+
+    <script src="NewLogin.js"></script>
+  </body>
+</html>

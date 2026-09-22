@@ -1,0 +1,245 @@
+/* Remove default spacing and make sizing easier */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Center the signup card on the page */
+body {
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff; /* Changed to white */
+  padding: 20px;
+}
+
+/* Main signup card */
+.login-container {
+  /* Changed from .signup-container to match HTML */
+  width: 100%;
+  max-width: 450px;
+  background-color: #f8f4ff; /* Light purple tint for card background */
+  padding: 35px 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(106, 13, 173, 0.15); /* Purple tinted shadow */
+  border: 1px solid #e8d5f5; /* Light purple border */
+}
+
+/* Welcome section */
+.welcome-section {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* PowerWise logo */
+.logo {
+  font-size: 45px;
+  margin-bottom: 8px;
+}
+
+/* Main heading */
+h1 {
+  color: #6a0dad; /* Dark purple for better visibility */
+  margin-bottom: 8px;
+}
+
+/* Description under the heading */
+.welcome-section p {
+  color: #555;
+  line-height: 1.5;
+}
+
+/* Space between each input section */
+.input-group {
+  margin-bottom: 16px;
+}
+
+/* Input labels */
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #2d0a4a; /* Dark purple for better visibility */
+}
+
+/* Input fields */
+input {
+  width: 100%;
+  padding: 13px;
+  border: 2px solid #d4b8e8; /* Light purple border */
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+  background-color: #ffffff;
+  color: #333;
+}
+
+/* Highlight input when user clicks on it */
+input:focus {
+  border-color: #6a0dad;
+  box-shadow: 0 0 5px rgba(106, 13, 173, 0.2);
+}
+
+/* Create account button */
+.login-btn {
+  /* Changed from button to match HTML class */
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background-color: #6a0dad;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 5px;
+  transition: background-color 0.3s ease;
+}
+
+/* Button effect when hovering */
+.login-btn:hover {
+  background-color: #520a87;
+}
+
+/* Login text at the bottom */
+.signup-text {
+  /* Changed from .login-text to match HTML class */
+  text-align: center;
+  margin-top: 20px;
+  color: #555;
+}
+
+/* Login link */
+.signup-text a {
+  color: #6a0dad;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.signup-text a:hover {
+  text-decoration: underline;
+}
+
+/* Make the card comfortable on small screens */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 30px 20px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+}
+
+/* Password box container */
+.password-box {
+  position: relative;
+  width: 100%;
+}
+
+.password-box input {
+  padding-right: 50px; /* Space for the show password button */
+}
+
+/* Show password button */
+.show-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px;
+  width: auto;
+  margin: 0;
+  color: #6a0dad;
+}
+
+.show-password:hover {
+  background: none;
+  color: #520a87;
+}
+
+/* Custom Alert */
+.alert-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.alert-overlay.show {
+  display: flex;
+}
+
+.alert-box {
+  width: 100%;
+  max-width: 350px;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  animation: popUp 0.3s ease;
+}
+
+.alert-icon {
+  font-size: 45px;
+  margin-bottom: 10px;
+}
+
+.alert-box h2 {
+  color: #2d0a4a;
+  margin-bottom: 10px;
+}
+
+.alert-box p {
+  color: #555;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.alert-box button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background-color: #6a0dad;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.alert-box button:hover {
+  background-color: #520a87;
+}
+
+@keyframes popUp {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Welcome text */
+.welcome-text {
+  color: #2d0a4a;
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 16px;
+}

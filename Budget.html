@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PowerWise - Budget</title>
+    <link rel="stylesheet" href="Budget.css" />
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header>
+      <a href="Home.html" class="back-btn">←</a>
+      <h1>⚡ Monthly Budget</h1>
+      <span style="font-size: 20px">💰</span>
+    </header>
+
+    <!-- Main content -->
+    <main>
+      <div class="budget-card">
+        <!-- Heading -->
+        <div class="budget-heading">
+          <div class="budget-icon">📊</div>
+          <h2>Set Monthly Budget</h2>
+          <p>
+            Set a monthly electricity budget to track your spending and get
+            notifications when you're close to your limit.
+          </p>
+        </div>
+
+        <!-- Current Budget Display -->
+        <div class="current-budget" id="current-budget">
+          <div class="budget-info">
+            <span class="label">Current Monthly Budget</span>
+            <h3 id="budget-amount">₦0.00</h3>
+          </div>
+          <div class="budget-status" id="budget-status">
+            <span class="status-badge">Not Set</span>
+          </div>
+        </div>
+
+        <!-- Budget Progress -->
+        <div class="budget-progress" id="budget-progress" style="display: none">
+          <div class="progress-header">
+            <span>Spent This Month</span>
+            <span id="progress-text">₦0 / ₦0</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar" style="width: 0%"></div>
+          </div>
+          <div class="progress-details">
+            <span id="remaining-text">Remaining: ₦0</span>
+            <span id="percentage-text">0% used</span>
+          </div>
+        </div>
+
+        <!-- Budget Form -->
+        <form id="budget-form">
+          <div class="input-group">
+            <label for="budget-amount-input">
+              Enter Monthly Budget Amount
+              <span class="label-hint"
+                >— Set how much you want to spend on electricity per month</span
+              >
+            </label>
+            <div class="amount-input">
+              <span>₦</span>
+              <input
+                type="number"
+                id="budget-amount-input"
+                placeholder="Enter amount"
+                min="100"
+                step="100"
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="set-budget-btn" id="set-budget-btn">
+            Set Budget 💰
+          </button>
+        </form>
+
+        <!-- Add this after the budget form in the HTML -->
+        <div id="disable-button-container"></div>
+
+        <!-- Quick Amount Buttons -->
+        <div class="quick-amounts">
+          <span class="quick-label">Quick Select:</span>
+          <button type="button" class="quick-amount" data-amount="5000">
+            ₦5,000
+          </button>
+          <button type="button" class="quick-amount" data-amount="10000">
+            ₦10,000
+          </button>
+          <button type="button" class="quick-amount" data-amount="20000">
+            ₦20,000
+          </button>
+          <button type="button" class="quick-amount" data-amount="50000">
+            ₦50,000
+          </button>
+        </div>
+
+        <!-- Budget History -->
+        <div class="history-section" id="history-section">
+          <h3><span>📋</span> Budget History</h3>
+          <div class="history-list" id="budget-history-list">
+            <div class="history-empty">No budget history yet.</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <a href="Home.html">
+        🏠
+        <span>Home</span>
+      </a>
+
+      <a href="Track.html">
+        📊
+        <span>Usage</span>
+      </a>
+
+      <a href="AddMeter.html">
+        ⚡
+        <span>Meters</span>
+      </a>
+
+      <a href="Profile.html">
+        👤
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <!-- Custom Alert Box -->
+    <div class="alert-overlay" id="alert-overlay">
+      <div class="alert-box">
+        <div class="alert-icon" id="alert-icon">⚡</div>
+        <h2 id="alert-title">Message</h2>
+        <p id="alert-message"></p>
+        <button id="alert-button">OK</button>
+      </div>
+    </div>
+
+    <script src="Budget.js"></script>
+  </body>
+</html>

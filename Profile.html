@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Profile</title>
+
+    <style>
+      /* Basic page setup */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f3f7;
+        color: #333;
+        padding-bottom: 80px;
+      }
+
+      /* Header */
+      header {
+        background: linear-gradient(135deg, #2d0a4a, #6a0dad);
+        color: white;
+        padding: 20px;
+        text-align: center;
+        position: relative;
+      }
+
+      header .back-link {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        text-decoration: none;
+        font-size: 24px;
+      }
+
+      header h1 {
+        font-size: 24px;
+      }
+
+      /* Main profile area */
+      main {
+        max-width: 600px;
+        margin: auto;
+        padding: 30px 20px;
+      }
+
+      /* Profile card */
+      .profile-card {
+        background-color: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      /* Profile icon */
+      .profile-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 15px;
+        background-color: #6a0dad;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 40px;
+      }
+
+      .profile-heading {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .profile-heading h2 {
+        color: #2d0a4a;
+        margin-bottom: 8px;
+      }
+
+      .profile-heading p {
+        color: #777;
+      }
+
+      /* Information fields */
+      .info-group {
+        margin-bottom: 20px;
+      }
+
+      .info-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 7px;
+        color: #555;
+      }
+
+      .info-group input {
+        width: 100%;
+        padding: 13px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 16px;
+        outline: none;
+      }
+
+      .info-group input:focus {
+        border-color: #6a0dad;
+        box-shadow: 0 0 5px rgba(106, 13, 173, 0.2);
+      }
+
+      /* Buttons */
+      .save-btn,
+      .logout-btn {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .save-btn {
+        background-color: #6a0dad;
+        color: white;
+        margin-top: 5px;
+      }
+
+      .save-btn:hover {
+        background-color: #520a87;
+      }
+
+      .logout-btn {
+        background-color: #f1e8f5;
+        color: #6a0dad;
+        margin-top: 15px;
+      }
+
+      .logout-btn:hover {
+        background-color: #e5d4ed;
+      }
+
+      /* Bottom navigation */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 5%;
+        box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .bottom-nav a {
+        text-decoration: none;
+        color: #777;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 18px;
+        transition: color 0.3s ease;
+      }
+
+      .bottom-nav a:hover {
+        color: #6a0dad;
+      }
+
+      .bottom-nav span {
+        font-size: 11px;
+        margin-top: 3px;
+      }
+
+      .bottom-nav a.active {
+        color: #6a0dad;
+      }
+
+      /* Mobile adjustments */
+      @media (max-width: 480px) {
+        main {
+          padding: 20px 15px;
+        }
+
+        .profile-card {
+          padding: 25px 20px;
+        }
+
+        header .back-link {
+          left: 15px;
+          font-size: 20px;
+        }
+      }
+
+      /* Meters connected display */
+      .meter-display {
+        background-color: #f5f3f7;
+        padding: 14px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #555;
+      }
+
+      .meter-display strong {
+        color: #6a0dad;
+        font-size: 20px;
+      }
+
+      /* Custom Alert */
+      .alert-overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        z-index: 1000;
+      }
+
+      .alert-overlay.show {
+        display: flex;
+      }
+
+      .alert-box {
+        width: 100%;
+        max-width: 350px;
+        background-color: white;
+        padding: 30px;
+        border-radius: 18px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        animation: popUp 0.3s ease;
+      }
+
+      .alert-icon {
+        font-size: 45px;
+        margin-bottom: 10px;
+      }
+
+      .alert-box h2 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .alert-box p {
+        color: #666;
+        margin-bottom: 25px;
+        line-height: 1.5;
+      }
+
+      .alert-box button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        background-color: #6a0dad;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .alert-box button:hover {
+        background-color: #520a87;
+      }
+
+      @keyframes popUp {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Page header -->
+    <header>
+      <a href="Home.html" class="back-link">←</a>
+      <h1>⚡ Apex Electricity</h1>
+    </header>
+
+    <!-- Main content -->
+    <main>
+      <div class="profile-card">
+        <!-- Profile heading -->
+        <div class="profile-heading">
+          <div class="profile-icon">👤</div>
+          <h2 id="profile-name">Your Profile</h2>
+          <p>Manage your account information</p>
+        </div>
+
+        <!-- Profile form -->
+        <form id="profile-form">
+          <div class="info-group">
+            <label for="fullname">Full Name</label>
+            <input type="text" id="fullname" required />
+          </div>
+
+          <div class="info-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" required />
+          </div>
+
+          <div class="info-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" required />
+          </div>
+
+          <div class="info-group">
+            <label>Meters Connected</label>
+            <div class="meter-display">
+              <span>⚡</span>
+              <strong id="meter-count">0</strong>
+              <span>meter(s) connected</span>
+            </div>
+          </div>
+
+          <button type="submit" class="save-btn">Save Changes</button>
+        </form>
+
+        <button class="logout-btn" id="logout-btn">Log Out</button>
+      </div>
+    </main>
+
+    <!-- Bottom navigation -->
+    <nav class="bottom-nav">
+      <a href="Home.html">
+        🏠
+        <span>Home</span>
+      </a>
+
+      <a href="Track.html">
+        📊
+        <span>Usage</span>
+      </a>
+
+      <a href="AddMeter.html">
+        ⚡
+        <span>Meters</span>
+      </a>
+
+      <a href="Profile.html" class="active">
+        👤
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <!-- Custom Alert Box -->
+    <div class="alert-overlay" id="alert-overlay">
+      <div class="alert-box">
+        <div class="alert-icon" id="alert-icon">⚡</div>
+        <h2 id="alert-title">Message</h2>
+        <p id="alert-message"></p>
+        <button id="alert-button">OK</button>
+      </div>
+    </div>
+
+    <script>
+      const alertOverlay = document.getElementById("alert-overlay");
+      const alertTitle = document.getElementById("alert-title");
+      const alertMessage = document.getElementById("alert-message");
+      const alertButton = document.getElementById("alert-button");
+
+      // Get the saved user and meters from localStorage
+      const savedUser = localStorage.getItem("powerWiseUser");
+      const savedMeters = localStorage.getItem("powerWiseMeters");
+
+      // Get the form and input elements
+      const profileForm = document.getElementById("profile-form");
+      const fullnameInput = document.getElementById("fullname");
+      const emailInput = document.getElementById("email");
+      const phoneInput = document.getElementById("phone");
+      const profileName = document.getElementById("profile-name");
+      const logoutButton = document.getElementById("logout-btn");
+
+      // Show a custom alert box
+      function showAlert(title, message, callback) {
+        alertTitle.textContent = title;
+        alertMessage.textContent = message;
+        alertOverlay.classList.add("show");
+
+        alertButton.onclick = function () {
+          alertOverlay.classList.remove("show");
+
+          if (callback) {
+            callback();
+          }
+        };
+      }
+
+      // Display the number of connected meters
+      if (savedMeters) {
+        const meters = JSON.parse(savedMeters);
+        document.getElementById("meter-count").textContent = meters.length;
+      }
+
+      // Check if a user account exists
+      if (savedUser) {
+        const user = JSON.parse(savedUser);
+
+        fullnameInput.value = user.fullname || "";
+        emailInput.value = user.email || "";
+        phoneInput.value = user.phone || "";
+        profileName.textContent = user.fullname || "Your Profile";
+      } else {
+        window.location.href = "Login.html";
+      }
+
+      // Save changes to the user's profile
+      profileForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const user = JSON.parse(localStorage.getItem("powerWiseUser"));
+
+        // Update the user's information
+        user.fullname = fullnameInput.value.trim();
+        user.email = emailInput.value.trim();
+        user.phone = phoneInput.value.trim();
+
+        // Save the updated user information
+        localStorage.setItem("powerWiseUser", JSON.stringify(user));
+
+        // Update the name on the page
+        profileName.textContent = user.fullname;
+
+        // Show success message
+        showAlert(
+          "Changes Saved! ⚡",
+          "Your profile has been updated successfully.",
+        );
+      });
+
+      // Log the user out
+      logoutButton.addEventListener("click", function () {
+        showAlert(
+          "Logged Out",
+          "You have been logged out successfully.",
+          function () {
+            window.location.href = "Login.html";
+          },
+        );
+      });
+    </script>
+  </body>
+</html>

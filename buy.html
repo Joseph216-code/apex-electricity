@@ -1,0 +1,1278 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Buy Electricity</title>
+
+    <style>
+      /* Basic page setup */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f3f7;
+        color: #333;
+        padding-bottom: 80px;
+      }
+
+      /* Header */
+      header {
+        background: linear-gradient(135deg, #2d0a4a, #6a0dad);
+        color: white;
+        padding: 20px;
+        text-align: center;
+        position: relative;
+      }
+
+      header .back-link {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        text-decoration: none;
+        font-size: 24px;
+      }
+
+      /* Main content */
+      main {
+        max-width: 600px;
+        margin: auto;
+        padding: 30px 20px;
+      }
+
+      /* Purchase card */
+      .purchase-card {
+        background-color: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      /* Page heading */
+      .purchase-heading {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .purchase-icon {
+        font-size: 50px;
+        margin-bottom: 10px;
+      }
+
+      .purchase-heading h2 {
+        color: #2d0a4a;
+        margin-bottom: 8px;
+      }
+
+      .purchase-heading p {
+        color: #777;
+        line-height: 1.5;
+      }
+
+      /* Toggle between existing and new meter */
+      .meter-toggle {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        background-color: #f5f3f7;
+        padding: 6px;
+        border-radius: 12px;
+      }
+
+      .meter-toggle button {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: transparent;
+        color: #777;
+      }
+
+      .meter-toggle button.active {
+        background-color: #6a0dad;
+        color: white;
+        box-shadow: 0 2px 10px rgba(106, 13, 173, 0.3);
+      }
+
+      .meter-toggle button:hover:not(.active) {
+        background-color: #e8d5f5;
+      }
+
+      /* Input groups */
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 7px;
+      }
+
+      .label-hint {
+        font-weight: normal;
+        color: #999;
+        font-size: 12px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 13px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 16px;
+        outline: none;
+        background-color: white;
+        transition: border-color 0.3s ease;
+      }
+
+      input:focus,
+      select:focus {
+        border-color: #6a0dad;
+        box-shadow: 0 0 5px rgba(106, 13, 173, 0.2);
+      }
+
+      /* Save meter checkbox */
+      .save-meter-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 15px;
+        background-color: #f9f6fc;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+
+      .save-meter-option input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        accent-color: #6a0dad;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      .save-meter-option label {
+        font-weight: normal;
+        color: #555;
+        font-size: 14px;
+        cursor: pointer;
+        margin: 0;
+      }
+
+      .save-meter-option label strong {
+        color: #6a0dad;
+      }
+
+      /* Buy button */
+      .buy-btn {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        background-color: #6a0dad;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .buy-btn:hover {
+        background-color: #520a87;
+      }
+
+      .buy-btn:disabled {
+        background-color: #aaa;
+        cursor: not-allowed;
+      }
+
+      .alert-box button:hover {
+        background-color: #520a87;
+      }
+
+      /* Message when there are no meters */
+      .no-meter-message {
+        text-align: center;
+        color: #777;
+        background-color: #f1e8f5;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+
+      .no-meter-message .empty-icon {
+        font-size: 40px;
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      .no-meter-message a {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #6a0dad;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+      }
+
+      .no-meter-message a:hover {
+        background-color: #520a87;
+      }
+
+      /* Meter count display */
+      .meter-count-display {
+        text-align: center;
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 15px;
+        padding: 8px;
+        background-color: #f9f6fc;
+        border-radius: 8px;
+      }
+
+      .meter-count-display strong {
+        color: #6a0dad;
+      }
+
+      /* Divider */
+      .divider {
+        display: flex;
+        align-items: center;
+        margin: 20px 0;
+        color: #999;
+        font-size: 13px;
+      }
+
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #ddd;
+      }
+
+      .divider span {
+        padding: 0 15px;
+      }
+
+      /* Section visibility */
+      .section-existing,
+      .section-new {
+        display: none;
+      }
+
+      .section-existing.active,
+      .section-new.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ============================================ */
+      /* RECEIPT - Enhanced Version */
+      /* ============================================ */
+      .receipt {
+        display: none;
+        margin-top: 25px;
+        background: linear-gradient(135deg, #f8f4ff, #f0e8fa);
+        border-radius: 16px;
+        padding: 25px;
+        border: 2px solid #6a0dad;
+        animation: slideUp 0.5s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .receipt::before {
+        content: "✓";
+        position: absolute;
+        top: -20px;
+        right: -20px;
+        font-size: 100px;
+        opacity: 0.08;
+        color: #6a0dad;
+      }
+
+      .receipt-header {
+        text-align: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px dashed #d5c4e0;
+      }
+
+      .receipt-header .receipt-icon {
+        font-size: 40px;
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .receipt-header h3 {
+        color: #2d0a4a;
+        font-size: 20px;
+        margin-bottom: 4px;
+      }
+
+      .receipt-header .receipt-subtitle {
+        color: #777;
+        font-size: 13px;
+      }
+
+      .receipt-body {
+        padding: 5px 0;
+      }
+
+      .receipt-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #e8ddf0;
+        font-size: 14px;
+      }
+
+      .receipt-row:last-child {
+        border-bottom: none;
+      }
+
+      .receipt-row .label {
+        color: #666;
+      }
+
+      .receipt-row .value {
+        font-weight: bold;
+        color: #2d0a4a;
+        text-align: right;
+      }
+
+      .receipt-row .value.amount {
+        color: #6a0dad;
+        font-size: 18px;
+      }
+
+      .receipt-footer {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 2px dashed #d5c4e0;
+        text-align: center;
+      }
+
+      .receipt-footer .receipt-token {
+        font-family: monospace;
+        font-size: 14px;
+        color: #6a0dad;
+        background-color: white;
+        padding: 8px 15px;
+        border-radius: 8px;
+        display: inline-block;
+        letter-spacing: 1px;
+        border: 1px dashed #6a0dad;
+      }
+
+      .receipt-footer .receipt-date {
+        display: block;
+        font-size: 12px;
+        color: #999;
+        margin-top: 10px;
+      }
+
+      .receipt-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .receipt-actions button {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-size: 14px;
+      }
+
+      .receipt-actions .print-btn {
+        background-color: #2d0a4a;
+        color: white;
+      }
+
+      .receipt-actions .print-btn:hover {
+        background-color: #1d0630;
+      }
+
+      .receipt-actions .close-btn {
+        background-color: #f1e8f5;
+        color: #6a0dad;
+      }
+
+      .receipt-actions .close-btn:hover {
+        background-color: #e5d4ed;
+      }
+
+      /* Status Badge */
+      .status-badge {
+        display: inline-block;
+        padding: 3px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .status-badge.success {
+        background-color: #dcfce7;
+        color: #16a34a;
+      }
+
+      /* Bottom navigation */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 5%;
+        box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .bottom-nav a {
+        text-decoration: none;
+        color: #777;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 18px;
+        transition: color 0.3s ease;
+      }
+
+      .bottom-nav a:hover {
+        color: #6a0dad;
+      }
+
+      .bottom-nav span {
+        font-size: 11px;
+        margin-top: 3px;
+      }
+
+      .bottom-nav a.active {
+        color: #6a0dad;
+      }
+
+      /* Mobile adjustments */
+      @media (max-width: 480px) {
+        main {
+          padding: 20px 15px;
+        }
+
+        .purchase-card {
+          padding: 25px 20px;
+        }
+
+        header .back-link {
+          left: 15px;
+          font-size: 20px;
+        }
+
+        .receipt {
+          padding: 20px;
+        }
+
+        .receipt-actions {
+          flex-direction: column;
+        }
+
+        .meter-toggle {
+          flex-direction: column;
+        }
+      }
+
+      /* Custom Alert */
+      .alert-overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        z-index: 1000;
+      }
+
+      .alert-overlay.show {
+        display: flex;
+      }
+
+      .alert-box {
+        width: 100%;
+        max-width: 350px;
+        background-color: white;
+        padding: 30px;
+        border-radius: 18px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        animation: popUp 0.3s ease;
+      }
+
+      .alert-icon {
+        font-size: 45px;
+        margin-bottom: 10px;
+      }
+
+      .alert-box h2 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .alert-box p {
+        color: #666;
+        margin-bottom: 25px;
+        line-height: 1.5;
+      }
+
+      .alert-box button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        background-color: #6a0dad;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .alert-box button:hover {
+        background-color: #520a87;
+      }
+
+      @keyframes popUp {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .alert-buttons {
+        display: flex;
+        gap: 10px;
+      }
+
+      .alert-buttons button {
+        width: 100%;
+      }
+
+      .deposit-option {
+        display: none;
+        background-color: #2d0a4a !important;
+      }
+
+      .deposit-option:hover {
+        background-color: #1d0630 !important;
+      }
+
+      /* Meter type indicator */
+      .meter-type-badge {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: bold;
+        background-color: #e8d5f5;
+        color: #6a0dad;
+        margin-left: 8px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header>
+      <a href="Home.html" class="back-link">←</a>
+      <h1>⚡ Apex Electricity</h1>
+    </header>
+
+    <main>
+      <div class="purchase-card">
+        <!-- Page heading -->
+        <div class="purchase-heading">
+          <div class="purchase-icon">⚡</div>
+          <h2>Buy Electricity</h2>
+          <p>
+            Select a saved meter or enter a new meter to purchase electricity.
+          </p>
+        </div>
+
+        <!-- Meter count display -->
+        <div class="meter-count-display" id="meter-count-display">
+          <strong id="meter-count-number">0</strong> meter(s) saved
+        </div>
+
+        <!-- Toggle between existing and new meter -->
+        <div class="meter-toggle">
+          <button id="toggle-existing" class="active">📋 Saved Meters</button>
+          <button id="toggle-new">➕ New Meter</button>
+        </div>
+
+        <!-- Purchase form -->
+        <form id="purchase-form">
+          <!-- Section: Existing Meters -->
+          <div id="section-existing" class="section-existing active">
+            <div class="input-group">
+              <label for="meter-select">Select Saved Meter</label>
+              <select id="meter-select" required>
+                <option value="">Choose a saved meter</option>
+              </select>
+            </div>
+
+            <!-- Message when no meters exist -->
+            <div
+              class="no-meter-message"
+              id="no-meter-message"
+              style="display: none"
+            >
+              <span class="empty-icon">⚡</span>
+              <p>No meters saved yet.</p>
+              <p style="font-size: 13px; margin-top: 5px">
+                You can add a meter below or go to
+                <a href="AddMeter.html" style="color: #6a0dad">Add Meter</a>
+                page.
+              </p>
+            </div>
+          </div>
+
+          <!-- Section: New Meter -->
+          <div id="section-new" class="section-new">
+            <div class="input-group">
+              <label for="new-meter-name">
+                Meter Name
+                <span class="label-hint">— e.g. Home, Office, or Shop</span>
+              </label>
+              <input
+                type="text"
+                id="new-meter-name"
+                placeholder="Enter meter name"
+              />
+            </div>
+
+            <div class="input-group">
+              <label for="new-meter-number">
+                Meter Number
+                <span class="label-hint"
+                  >— The unique number on your meter</span
+                >
+              </label>
+              <input
+                type="text"
+                id="new-meter-number"
+                placeholder="Enter meter number"
+              />
+            </div>
+
+            <!-- Save meter option -->
+            <div class="save-meter-option">
+              <input type="checkbox" id="save-meter" checked />
+              <label for="save-meter">
+                💾 Save this meter to <strong>My Meters</strong> for future
+                purchases
+              </label>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="divider">
+            <span>Enter Amount</span>
+          </div>
+
+          <!-- Amount input -->
+          <div class="input-group">
+            <label for="amount">
+              Amount (₦)
+              <span class="label-hint">— Minimum ₦100</span>
+            </label>
+            <input
+              type="number"
+              id="amount"
+              placeholder="Enter amount"
+              min="100"
+              required
+            />
+          </div>
+
+          <button type="submit" class="buy-btn" id="buy-btn">
+            Buy Electricity ⚡
+          </button>
+        </form>
+
+        <!-- Enhanced Receipt -->
+        <div class="receipt" id="receipt">
+          <div class="receipt-header">
+            <span class="receipt-icon">⚡</span>
+            <h3>Purchase Receipt</h3>
+            <span class="receipt-subtitle"
+              >Transaction Completed Successfully</span
+            >
+          </div>
+
+          <div class="receipt-body">
+            <div class="receipt-row">
+              <span class="label">Meter</span>
+              <span class="value" id="receipt-meter">—</span>
+            </div>
+            <div class="receipt-row">
+              <span class="label">Meter Number</span>
+              <span class="value" id="receipt-meter-number">—</span>
+            </div>
+            <div class="receipt-row">
+              <span class="label">Amount Purchased</span>
+              <span class="value amount" id="receipt-amount">₦0</span>
+            </div>
+            <div class="receipt-row">
+              <span class="label">Units (kWh)</span>
+              <span class="value" id="receipt-units">0 kWh</span>
+            </div>
+            <div class="receipt-row">
+              <span class="label">Status</span>
+              <span class="value" id="receipt-status">
+                <span class="status-badge success">✓ Successful</span>
+              </span>
+            </div>
+            <div class="receipt-row">
+              <span class="label">Transaction ID</span>
+              <span
+                class="value"
+                id="receipt-transaction-id"
+                style="font-family: monospace; font-size: 12px"
+                >—</span
+              >
+            </div>
+            <div class="receipt-row">
+              <span class="label">Payment Method</span>
+              <span class="value" id="receipt-payment-method"
+                >Wallet Balance</span
+              >
+            </div>
+          </div>
+
+          <div class="receipt-footer">
+            <span class="receipt-token" id="receipt-token"
+              >•••• •••• •••• ••••</span
+            >
+            <span class="receipt-date" id="receipt-date">—</span>
+          </div>
+
+          <div class="receipt-actions">
+            <!-- <button class="print-btn" id="print-receipt">🖨️ Print</button> -->
+            <button class="close-btn" id="close-receipt">✕ Close</button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom navigation -->
+    <nav class="bottom-nav">
+      <a href="Home.html">
+        🏠
+        <span>Home</span>
+      </a>
+
+      <a href="Track.html">
+        📊
+        <span>Usage</span>
+      </a>
+
+      <a href="AddMeter.html" class="active">
+        ⚡
+        <span>Meters</span>
+      </a>
+
+      <a href="Profile.html">
+        👤
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <!-- Custom Alert Box -->
+    <div class="alert-overlay" id="alert-overlay">
+      <div class="alert-box">
+        <div class="alert-icon" id="alert-icon">⚡</div>
+        <h2 id="alert-title">Message</h2>
+        <p id="alert-message"></p>
+
+        <div class="alert-buttons">
+          <button id="alert-button">OK</button>
+          <button id="deposit-button" class="deposit-option">
+            Deposit Now 💰
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load notification system -->
+    <script src="notifications.js"></script>
+
+    <script>
+      const alertOverlay = document.getElementById("alert-overlay");
+      const alertTitle = document.getElementById("alert-title");
+      const alertMessage = document.getElementById("alert-message");
+      const alertButton = document.getElementById("alert-button");
+      const depositButton = document.getElementById("deposit-button");
+
+      // Get the elements from the page
+      const purchaseForm = document.getElementById("purchase-form");
+      const meterSelect = document.getElementById("meter-select");
+      const amountInput = document.getElementById("amount");
+      const noMeterMessage = document.getElementById("no-meter-message");
+      const meterCountDisplay = document.getElementById("meter-count-number");
+      const buyBtn = document.getElementById("buy-btn");
+      const receipt = document.getElementById("receipt");
+      const receiptMeter = document.getElementById("receipt-meter");
+      const receiptMeterNumber = document.getElementById(
+        "receipt-meter-number",
+      );
+      const receiptAmount = document.getElementById("receipt-amount");
+      const receiptUnits = document.getElementById("receipt-units");
+      const receiptStatus = document.getElementById("receipt-status");
+      const receiptTransactionId = document.getElementById(
+        "receipt-transaction-id",
+      );
+      const receiptPaymentMethod = document.getElementById(
+        "receipt-payment-method",
+      );
+      const receiptToken = document.getElementById("receipt-token");
+      const receiptDate = document.getElementById("receipt-date");
+      const printBtn = document.getElementById("print-receipt");
+      const closeBtn = document.getElementById("close-receipt");
+
+      // Toggle buttons
+      const toggleExisting = document.getElementById("toggle-existing");
+      const toggleNew = document.getElementById("toggle-new");
+      const sectionExisting = document.getElementById("section-existing");
+      const sectionNew = document.getElementById("section-new");
+      const newMeterName = document.getElementById("new-meter-name");
+      const newMeterNumber = document.getElementById("new-meter-number");
+      const saveMeterCheckbox = document.getElementById("save-meter");
+
+      // =============================================
+      // LOAD METERS FROM localStorage
+      // =============================================
+
+      function loadMeters() {
+        const savedMeters = localStorage.getItem("powerWiseMeters");
+        console.log("Raw savedMeters from localStorage:", savedMeters);
+
+        let meters = [];
+
+        if (savedMeters) {
+          try {
+            meters = JSON.parse(savedMeters);
+            console.log("Parsed meters:", meters);
+          } catch (error) {
+            console.error("Error parsing meters:", error);
+            meters = [];
+          }
+        }
+
+        // Clear existing options (keep the first "Choose a meter" option)
+        while (meterSelect.options.length > 1) {
+          meterSelect.remove(1);
+        }
+
+        // Update meter count
+        meterCountDisplay.textContent = meters.length;
+
+        if (meters.length === 0) {
+          noMeterMessage.style.display = "block";
+          buyBtn.disabled = false; // Allow buying with new meter
+          console.log("❌ No meters found in localStorage");
+        } else {
+          noMeterMessage.style.display = "none";
+          buyBtn.disabled = false;
+
+          meters.forEach(function (meter) {
+            const option = document.createElement("option");
+            option.value = meter.number;
+            option.textContent = meter.name + " (" + meter.number + ")";
+            meterSelect.appendChild(option);
+          });
+
+          console.log("✅ Loaded " + meters.length + " meter(s)");
+        }
+
+        return meters;
+      }
+
+      // =============================================
+      // TOGGLE BETWEEN EXISTING AND NEW METER
+      // =============================================
+
+      toggleExisting.addEventListener("click", function () {
+        toggleExisting.classList.add("active");
+        toggleNew.classList.remove("active");
+        sectionExisting.classList.add("active");
+        sectionNew.classList.remove("active");
+
+        // Clear new meter fields
+        newMeterName.value = "";
+        newMeterNumber.value = "";
+        saveMeterCheckbox.checked = true;
+      });
+
+      toggleNew.addEventListener("click", function () {
+        toggleNew.classList.add("active");
+        toggleExisting.classList.remove("active");
+        sectionNew.classList.add("active");
+        sectionExisting.classList.remove("active");
+
+        // Focus on first field
+        newMeterName.focus();
+      });
+
+      // =============================================
+      // HELPER FUNCTIONS
+      // =============================================
+
+      function generateTransactionId() {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let id = "APX-";
+        for (let i = 0; i < 10; i++) {
+          id += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return id;
+      }
+
+      function generateToken() {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let token = "";
+        for (let i = 0; i < 16; i++) {
+          if (i > 0 && i % 4 === 0) token += " ";
+          token += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return token;
+      }
+
+      function calculateUnits(amount) {
+        const ratePerKWh = 45;
+        return (amount / ratePerKWh).toFixed(2);
+      }
+
+      function getCurrentDateTime() {
+        return new Date().toLocaleString(undefined, {
+          weekday: "short",
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
+      }
+
+      // =============================================
+      // SHOW ALERT
+      // =============================================
+
+      function showAlert(title, message, showDeposit = false, callback) {
+        alertTitle.textContent = title;
+        alertMessage.textContent = message;
+        alertOverlay.classList.add("show");
+
+        if (showDeposit) {
+          depositButton.style.display = "block";
+          alertButton.textContent = "Not Now";
+        } else {
+          depositButton.style.display = "none";
+          alertButton.textContent = "OK";
+        }
+
+        alertButton.onclick = function () {
+          alertOverlay.classList.remove("show");
+          if (callback) callback();
+        };
+
+        depositButton.onclick = function () {
+          window.location.href = "Deposit.html";
+        };
+      }
+
+      // =============================================
+      // SAVE METER FUNCTION
+      // =============================================
+
+      function saveNewMeter(name, number) {
+        const savedMeters = localStorage.getItem("powerWiseMeters");
+        const meters = savedMeters ? JSON.parse(savedMeters) : [];
+
+        // Check if meter already exists
+        const exists = meters.some(function (m) {
+          return m.number === number;
+        });
+
+        if (exists) {
+          return false; // Meter already exists
+        }
+
+        meters.push({
+          name: name,
+          number: number,
+          dateAdded: new Date().toISOString(),
+        });
+
+        localStorage.setItem("powerWiseMeters", JSON.stringify(meters));
+        return true;
+      }
+
+      // =============================================
+      // LOAD METERS ON PAGE LOAD
+      // =============================================
+
+      let meters = loadMeters();
+
+      // Reload when page becomes visible
+      document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) {
+          meters = loadMeters();
+        }
+      });
+
+      // Listen for storage changes
+      window.addEventListener("storage", function (event) {
+        if (event.key === "powerWiseMeters") {
+          meters = loadMeters();
+        }
+      });
+
+      // =============================================
+      // RECEIPT CONTROLS
+      // =============================================
+
+      closeBtn.addEventListener("click", function () {
+        receipt.style.display = "none";
+      });
+
+      // printBtn.addEventListener("click", function () {
+      //   window.print();
+      // });
+
+      // =============================================
+      // PURCHASE FORM SUBMISSION
+      // =============================================
+
+      purchaseForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        let meterName = "";
+        let meterNumber = "";
+        let meterSaved = false;
+
+        // Check which mode we're in
+        if (sectionExisting.classList.contains("active")) {
+          // Using existing meter
+          if (meterSelect.value === "") {
+            showAlert(
+              "Select a Meter ⚠️",
+              "Please select a saved meter or switch to 'New Meter' mode.",
+            );
+            return;
+          }
+
+          const selectedMeter = meters.find(function (meter) {
+            return meter.number === meterSelect.value;
+          });
+
+          if (!selectedMeter) {
+            showAlert(
+              "Error ⚠️",
+              "Selected meter not found. Please try again.",
+            );
+            return;
+          }
+
+          meterName = selectedMeter.name;
+          meterNumber = selectedMeter.number;
+          meterSaved = true;
+        } else {
+          // Using new meter
+          meterName = newMeterName.value.trim();
+          meterNumber = newMeterNumber.value.trim();
+
+          if (meterName === "" || meterNumber === "") {
+            showAlert(
+              "Missing Information ⚠️",
+              "Please enter both meter name and number.",
+            );
+            return;
+          }
+
+          // Save meter if checkbox is checked
+          if (saveMeterCheckbox.checked) {
+            const saved = saveNewMeter(meterName, meterNumber);
+            if (saved) {
+              meterSaved = true;
+              // Reload meters for dropdown
+              meters = loadMeters();
+              // Add notification for meter saved
+              try {
+                if (typeof addNotification === "function") {
+                  addNotification(
+                    "⚡ Meter Saved",
+                    `New meter "${meterName}" (${meterNumber}) has been saved for future purchases.`,
+                    "system",
+                    "⚡",
+                  );
+                }
+              } catch (error) {
+                console.log("Notification not available:", error);
+              }
+            } else {
+              // Meter already exists, still allow purchase
+              meterSaved = true;
+            }
+          }
+        }
+
+        // Get amount
+        const amount = Number(amountInput.value);
+
+        if (amount < 100) {
+          showAlert(
+            "Invalid Amount ⚠️",
+            "Please enter an amount of at least ₦100.",
+          );
+          return;
+        }
+
+        // Get user's balance
+        const savedBalance = localStorage.getItem("powerWiseBalance");
+        const currentBalance = savedBalance ? Number(savedBalance) : 0;
+
+        if (currentBalance < amount) {
+          showAlert(
+            "Insufficient Balance 💰",
+            `You don't have enough money. Your current balance is ₦${currentBalance.toLocaleString()}.`,
+            true,
+          );
+          return;
+        }
+
+        // Process purchase
+        const newBalance = currentBalance - amount;
+        localStorage.setItem("powerWiseBalance", newBalance);
+
+        // Save transaction
+        const savedTransactions = localStorage.getItem("powerWiseTransactions");
+        const transactions = savedTransactions
+          ? JSON.parse(savedTransactions)
+          : [];
+
+        const transactionId = generateTransactionId();
+        const units = calculateUnits(amount);
+
+        const transaction = {
+          meter: meterName,
+          meterNumber: meterNumber,
+          amount: amount,
+          units: units,
+          status: "Completed",
+          transactionId: transactionId,
+          date: new Date().toISOString(),
+          saved: meterSaved,
+        };
+
+        transactions.push(transaction);
+        localStorage.setItem(
+          "powerWiseTransactions",
+          JSON.stringify(transactions),
+        );
+
+        // Add notification
+        try {
+          if (typeof addNotification === "function") {
+            const savedText = meterSaved
+              ? " (saved meter)"
+              : " (one-time purchase)";
+            addNotification(
+              "⚡ Electricity Purchased",
+              `₦${amount.toLocaleString()} of electricity bought for "${meterName}"${savedText}.`,
+              "purchase",
+              "⚡",
+            );
+          }
+        } catch (error) {
+          console.log("Notification not available:", error);
+        }
+
+        // Show success
+        showAlert(
+          "Purchase Successful! ⚡",
+          `Your electricity purchase of ₦${amount.toLocaleString()} has been completed successfully.`,
+          false,
+          function () {
+            receiptMeter.textContent = meterName;
+            receiptMeterNumber.textContent = meterNumber;
+            receiptAmount.textContent = `₦${amount.toLocaleString()}`;
+            receiptUnits.textContent = `${units} kWh`;
+            receiptStatus.innerHTML = `<span class="status-badge success">✓ Successful</span>`;
+            receiptTransactionId.textContent = transactionId;
+            receiptPaymentMethod.textContent = "Wallet Balance";
+            receiptToken.textContent = generateToken();
+            receiptDate.textContent = getCurrentDateTime();
+
+            receipt.style.display = "block";
+            amountInput.value = "";
+
+            // Clear new meter fields if used
+            if (sectionNew.classList.contains("active")) {
+              if (!saveMeterCheckbox.checked) {
+                newMeterName.value = "";
+                newMeterNumber.value = "";
+              }
+            }
+
+            receipt.scrollIntoView({ behavior: "smooth", block: "center" });
+          },
+        );
+      });
+    </script>
+  </body>
+</html>

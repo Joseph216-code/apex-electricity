@@ -1,0 +1,705 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notifications</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: #f5f3f7;
+        color: #333;
+        font-family: Arial, sans-serif;
+        padding-bottom: 30px;
+      }
+
+      header {
+        align-items: center;
+        background: linear-gradient(135deg, #2d0a4a, #6a0dad);
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        padding: 18px 7%;
+      }
+
+      header h1 {
+        font-size: 22px;
+      }
+
+      .back-link {
+        color: white;
+        font-size: 24px;
+        text-decoration: none;
+      }
+
+      main {
+        margin: auto;
+        max-width: 760px;
+        padding: 30px 20px;
+      }
+
+      .heading-row {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .heading-row h2 {
+        color: #2d0a4a;
+      }
+
+      .heading-row .notification-count {
+        font-size: 14px;
+        color: #777;
+        background: #f1e8f5;
+        padding: 4px 12px;
+        border-radius: 20px;
+      }
+
+      .clear-button {
+        background: transparent;
+        border: 0;
+        color: #6a0dad;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 6px 12px;
+        border-radius: 8px;
+        transition: background 0.3s ease;
+      }
+
+      .clear-button:hover {
+        background: #f1e8f5;
+      }
+
+      .mark-read-button {
+        background: transparent;
+        border: 0;
+        color: #28a745;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 6px 12px;
+        border-radius: 8px;
+        transition: background 0.3s ease;
+        margin-right: 8px;
+      }
+
+      .mark-read-button:hover {
+        background: #e8f5e9;
+      }
+
+      .action-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .notification-list {
+        display: grid;
+        gap: 12px;
+        list-style: none;
+      }
+
+      .notification {
+        align-items: flex-start;
+        background: white;
+        border-left: 4px solid #6a0dad;
+        border-radius: 12px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        display: flex;
+        gap: 14px;
+        padding: 18px;
+        transition:
+          transform 0.2s ease,
+          opacity 0.3s ease;
+        position: relative;
+        cursor: pointer;
+      }
+
+      .notification:hover {
+        transform: translateX(4px);
+      }
+
+      /* Unread notification style */
+      .notification.unread {
+        background: #f0f7ff;
+        border-left-color: #3b82f6;
+      }
+
+      .notification.unread::after {
+        content: "●";
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        color: #3b82f6;
+        font-size: 12px;
+        animation: dotPulse 2s ease-in-out infinite;
+      }
+
+      @keyframes dotPulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.5;
+          transform: scale(1.2);
+        }
+      }
+
+      .notification.read {
+        opacity: 0.85;
+      }
+
+      .notification.read::after {
+        display: none;
+      }
+
+      .notification-icon {
+        font-size: 24px;
+        flex-shrink: 0;
+      }
+
+      .notification-content {
+        flex: 1;
+      }
+
+      .notification-title {
+        font-weight: bold;
+        margin-bottom: 4px;
+        color: #2d0a4a;
+      }
+
+      .notification-message {
+        color: #555;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .notification-date {
+        color: #999;
+        font-size: 12px;
+        margin-top: 6px;
+      }
+
+      .empty-state {
+        background: white;
+        border-radius: 12px;
+        color: #777;
+        padding: 40px 28px;
+        text-align: center;
+      }
+
+      .empty-state .empty-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+        display: block;
+      }
+
+      .empty-state p {
+        color: #999;
+      }
+
+      /* Notification type colors */
+      .notification.deposit {
+        border-left-color: #28a745;
+      }
+      .notification.deposit.unread::after {
+        color: #28a745;
+      }
+
+      .notification.purchase {
+        border-left-color: #6a0dad;
+      }
+      .notification.purchase.unread::after {
+        color: #6a0dad;
+      }
+
+      .notification.budget {
+        border-left-color: #ffc107;
+      }
+      .notification.budget.unread::after {
+        color: #ffc107;
+      }
+
+      .notification.system {
+        border-left-color: #17a2b8;
+      }
+      .notification.system.unread::after {
+        color: #17a2b8;
+      }
+
+      .notification.budget_warning {
+        border-left-color: #f59e0b;
+      }
+      .notification.budget_warning.unread::after {
+        color: #f59e0b;
+      }
+
+      .notification.budget_exceeded {
+        border-left-color: #dc2626;
+      }
+      .notification.budget_exceeded.unread::after {
+        color: #dc2626;
+      }
+
+      @media (max-width: 480px) {
+        main {
+          padding: 20px 15px;
+        }
+
+        header {
+          padding: 15px 20px;
+        }
+
+        .notification {
+          padding: 14px;
+          gap: 10px;
+        }
+
+        .notification-icon {
+          font-size: 20px;
+        }
+
+        .action-row {
+          flex-wrap: wrap;
+          justify-content: flex-end;
+        }
+
+        .mark-read-button {
+          font-size: 12px;
+          padding: 4px 10px;
+        }
+
+        .clear-button {
+          font-size: 12px;
+          padding: 4px 10px;
+        }
+
+        .heading-row {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .heading-row .action-row {
+          width: 100%;
+          justify-content: flex-start;
+        }
+      }
+
+      /* ============================================ */
+      /* CUSTOM ALERT */
+      /* ============================================ */
+      .alert-overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        z-index: 1000;
+      }
+
+      .alert-overlay.show {
+        display: flex;
+      }
+
+      .alert-box {
+        width: 100%;
+        max-width: 380px;
+        background-color: white;
+        padding: 35px 30px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: popUp 0.3s ease;
+      }
+
+      .alert-icon {
+        font-size: 50px;
+        margin-bottom: 12px;
+      }
+
+      .alert-box h2 {
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 22px;
+      }
+
+      .alert-box p {
+        color: #666;
+        margin-bottom: 25px;
+        line-height: 1.6;
+        font-size: 15px;
+      }
+
+      .alert-buttons {
+        display: flex;
+        gap: 10px;
+      }
+
+      .alert-buttons button {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .alert-buttons .alert-confirm {
+        background-color: #6a0dad;
+        color: white;
+      }
+
+      .alert-buttons .alert-confirm:hover {
+        background-color: #520a87;
+      }
+
+      .alert-buttons .alert-cancel {
+        background-color: #f1e8f5;
+        color: #6a0dad;
+      }
+
+      .alert-buttons .alert-cancel:hover {
+        background-color: #e5d4ed;
+      }
+
+      .alert-buttons .alert-danger {
+        background-color: #dc2626;
+        color: white;
+      }
+
+      .alert-buttons .alert-danger:hover {
+        background-color: #b91c1c;
+      }
+
+      .alert-buttons .alert-single {
+        width: 100%;
+        background-color: #6a0dad;
+        color: white;
+      }
+
+      .alert-buttons .alert-single:hover {
+        background-color: #520a87;
+      }
+
+      @keyframes popUp {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <a class="back-link" href="Home.html" aria-label="Back to home"
+        >&#8592;</a
+      >
+      <h1>Apex Electricity</h1>
+      <span aria-hidden="true">&#128276;</span>
+    </header>
+
+    <main>
+      <div class="heading-row">
+        <h2>Notifications</h2>
+        <div class="action-row">
+          <button class="mark-read-button" id="mark-read-button" type="button">
+            ✓ Mark all read
+          </button>
+          <button class="clear-button" id="clear-button" type="button">
+            Clear all
+          </button>
+        </div>
+      </div>
+      <ul class="notification-list" id="notification-list"></ul>
+    </main>
+
+    <!-- Custom Alert Box -->
+    <div class="alert-overlay" id="alert-overlay">
+      <div class="alert-box">
+        <div class="alert-icon" id="alert-icon">⚡</div>
+        <h2 id="alert-title">Message</h2>
+        <p id="alert-message"></p>
+        <div class="alert-buttons" id="alert-buttons">
+          <button class="alert-single" id="alert-single-btn">OK</button>
+          <button
+            class="alert-cancel"
+            id="alert-cancel-btn"
+            style="display: none"
+          >
+            Cancel
+          </button>
+          <button
+            class="alert-confirm"
+            id="alert-confirm-btn"
+            style="display: none"
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load shared notification functions -->
+    <script src="notifications.js"></script>
+
+    <script>
+      const notificationList = document.getElementById("notification-list");
+      const clearButton = document.getElementById("clear-button");
+      const markReadButton = document.getElementById("mark-read-button");
+
+      // =============================================
+      // CUSTOM ALERT SYSTEM
+      // =============================================
+
+      const alertOverlay = document.getElementById("alert-overlay");
+      const alertTitle = document.getElementById("alert-title");
+      const alertMessage = document.getElementById("alert-message");
+      const alertIcon = document.getElementById("alert-icon");
+      const alertSingleBtn = document.getElementById("alert-single-btn");
+      const alertCancelBtn = document.getElementById("alert-cancel-btn");
+      const alertConfirmBtn = document.getElementById("alert-confirm-btn");
+      const alertButtons = document.getElementById("alert-buttons");
+
+      let alertCallback = null;
+      let alertCancelCallback = null;
+
+      function showCustomAlert(title, message, options = {}) {
+        return new Promise(function (resolve, reject) {
+          // Set the content
+          alertTitle.textContent = title;
+          alertMessage.textContent = message;
+          alertIcon.textContent = options.icon || "⚡";
+
+          // Reset buttons
+          alertSingleBtn.style.display = "none";
+          alertCancelBtn.style.display = "none";
+          alertConfirmBtn.style.display = "none";
+
+          // Setup buttons based on options
+          if (options.type === "confirm") {
+            // Confirm/Cancel dialog
+            alertConfirmBtn.style.display = "block";
+            alertCancelBtn.style.display = "block";
+            alertConfirmBtn.textContent = options.confirmText || "Confirm";
+            alertCancelBtn.textContent = options.cancelText || "Cancel";
+
+            if (options.danger) {
+              alertConfirmBtn.className = "alert-danger";
+            } else {
+              alertConfirmBtn.className = "alert-confirm";
+            }
+
+            alertCancelBtn.className = "alert-cancel";
+
+            alertCancelBtn.onclick = function () {
+              alertOverlay.classList.remove("show");
+              resolve(false);
+            };
+
+            alertConfirmBtn.onclick = function () {
+              alertOverlay.classList.remove("show");
+              resolve(true);
+            };
+          } else {
+            // Single OK button
+            alertSingleBtn.style.display = "block";
+            alertSingleBtn.textContent = options.buttonText || "OK";
+            alertSingleBtn.className = options.danger
+              ? "alert-danger"
+              : "alert-single";
+
+            alertSingleBtn.onclick = function () {
+              alertOverlay.classList.remove("show");
+              resolve(true);
+            };
+          }
+
+          // Show the alert
+          alertOverlay.classList.add("show");
+        });
+      }
+
+      // Make alert available globally
+      window.showCustomAlert = showCustomAlert;
+
+      // =============================================
+      // NOTIFICATION FUNCTIONS
+      // =============================================
+
+      // Render all notifications
+      function renderNotifications() {
+        const notifications = getNotifications();
+        notificationList.innerHTML = "";
+
+        if (notifications.length === 0) {
+          notificationList.innerHTML = `
+            <li class="empty-state">
+              <span class="empty-icon">🔔</span>
+              <p>No notifications yet.</p>
+              <p style="font-size: 13px; margin-top: 5px;">
+                Notifications will appear when you deposit, buy electricity, or set a budget.
+              </p>
+            </li>
+          `;
+          updateNotificationBadge();
+          return;
+        }
+
+        notifications.forEach(function (notification) {
+          const item = document.createElement("li");
+          const date = new Date(notification.date).toLocaleString(undefined, {
+            dateStyle: "medium",
+            timeStyle: "short",
+          });
+
+          const icon = notification.icon || "🔔";
+          const typeClass = notification.type || "system";
+          const isUnread = !notification.read;
+
+          item.className = `notification ${typeClass} ${isUnread ? "unread" : "read"}`;
+          item.dataset.id = notification.id;
+
+          item.innerHTML = `
+            <span class="notification-icon" aria-hidden="true">${icon}</span>
+            <div class="notification-content">
+              <p class="notification-title">${notification.title}</p>
+              <p class="notification-message">${notification.message}</p>
+              <p class="notification-date">${date}</p>
+            </div>
+          `;
+
+          // Click to mark as read
+          item.addEventListener("click", function () {
+            if (isUnread) {
+              markNotificationAsRead(notification.id);
+              renderNotifications();
+            }
+          });
+
+          notificationList.appendChild(item);
+        });
+
+        updateNotificationBadge();
+      }
+
+      // =============================================
+      // BUTTON HANDLERS WITH CUSTOM ALERT
+      // =============================================
+
+      // Mark all as read
+      markReadButton.addEventListener("click", async function () {
+        const unreadCount = getUnreadCount();
+        if (unreadCount === 0) {
+          await showCustomAlert(
+            "No Unread Notifications",
+            "You don't have any unread notifications to mark as read.",
+            { icon: "✅", type: "single", buttonText: "OK" },
+          );
+          return;
+        }
+
+        const confirmed = await showCustomAlert(
+          "Mark All as Read?",
+          `You have ${unreadCount} unread notification(s). Mark all as read?`,
+          { icon: "📖", type: "confirm", confirmText: "Mark All Read" },
+        );
+
+        if (confirmed) {
+          markAllAsRead();
+          renderNotifications();
+          await showCustomAlert(
+            "All Marked as Read! ✅",
+            `${unreadCount} notification(s) have been marked as read.`,
+            { icon: "✅", type: "single", buttonText: "OK" },
+          );
+        }
+      });
+
+      // Clear all notifications
+      clearButton.addEventListener("click", async function () {
+        const notifications = getNotifications();
+        if (notifications.length === 0) {
+          await showCustomAlert(
+            "No Notifications",
+            "There are no notifications to clear.",
+            { icon: "ℹ️", type: "single", buttonText: "OK" },
+          );
+          return;
+        }
+
+        const confirmed = await showCustomAlert(
+          "Clear All Notifications? ⚠️",
+          `This will permanently delete all ${notifications.length} notification(s). This action cannot be undone.`,
+          {
+            icon: "⚠️",
+            type: "confirm",
+            confirmText: "Clear All",
+            danger: true,
+          },
+        );
+
+        if (confirmed) {
+          clearAllNotifications();
+          renderNotifications();
+          await showCustomAlert(
+            "Cleared! 🗑️",
+            "All notifications have been cleared successfully.",
+            { icon: "✅", type: "single", buttonText: "OK" },
+          );
+        }
+      });
+
+      // =============================================
+      // STORAGE EVENT LISTENER
+      // =============================================
+
+      window.addEventListener("storage", function (event) {
+        if (
+          event.key === "powerWiseNotifications" ||
+          event.key === "powerWiseNotifications_trigger"
+        ) {
+          renderNotifications();
+        }
+      });
+
+      // =============================================
+      // INITIAL RENDER
+      // =============================================
+
+      renderNotifications();
+
+      // =============================================
+      // OVERRIDE DEFAULT ALERT/CONFIRM (optional)
+      // =============================================
+
+      // Uncomment this to replace the default alert with custom alert
+      // window.alert = function(message) {
+      //   return showCustomAlert("Alert", message, { icon: "ℹ️", type: "single", buttonText: "OK" });
+      // };
+      //
+      // window.confirm = function(message) {
+      //   return showCustomAlert("Confirm", message, { icon: "❓", type: "confirm", confirmText: "Yes", cancelText: "No" });
+      // };
+    </script>
+  </body>
+</html>

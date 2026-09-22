@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Add Meter</title>
+
+    <style>
+      /* Basic page setup */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f3f7;
+        color: #333;
+        padding-bottom: 80px;
+      }
+
+      /* Header */
+      header {
+        background: linear-gradient(135deg, #2d0a4a, #6a0dad);
+        color: white;
+        padding: 20px;
+        text-align: center;
+        position: relative;
+      }
+
+      header .back-link {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        text-decoration: none;
+        font-size: 24px;
+      }
+
+      header h1 {
+        font-size: 22px;
+      }
+
+      /* Main content */
+      main {
+        max-width: 600px;
+        margin: auto;
+        padding: 30px 20px;
+      }
+
+      /* Form card */
+      .meter-card {
+        background-color: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .meter-heading {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .meter-heading .meter-icon {
+        font-size: 50px;
+        margin-bottom: 10px;
+      }
+
+      .meter-heading h2 {
+        color: #2d0a4a;
+        margin-bottom: 8px;
+      }
+
+      .meter-heading p {
+        color: #777;
+        line-height: 1.5;
+      }
+
+      /* Form fields */
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 7px;
+      }
+
+      .label-hint {
+        font-weight: normal;
+        color: #999;
+        font-size: 12px;
+      }
+
+      input {
+        width: 100%;
+        padding: 13px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 16px;
+        outline: none;
+        transition:
+          border-color 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      input:focus {
+        border-color: #6a0dad;
+        box-shadow: 0 0 5px rgba(106, 13, 173, 0.2);
+      }
+
+      input::placeholder {
+        color: #bbb;
+      }
+
+      /* Save button */
+      .save-meter-btn {
+        width: 100%;
+        padding: 14px;
+        background-color: #6a0dad;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .save-meter-btn:hover {
+        background-color: #520a87;
+      }
+
+      /* Bottom navigation */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 5%;
+        box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .bottom-nav a {
+        text-decoration: none;
+        color: #777;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 18px;
+        transition: color 0.3s ease;
+      }
+
+      .bottom-nav a:hover {
+        color: #6a0dad;
+      }
+
+      .bottom-nav span {
+        font-size: 11px;
+        margin-top: 3px;
+      }
+
+      .bottom-nav a.active {
+        color: #6a0dad;
+      }
+
+      /* Mobile adjustments */
+      @media (max-width: 480px) {
+        main {
+          padding: 20px 15px;
+        }
+
+        .meter-card {
+          padding: 25px 20px;
+        }
+
+        header .back-link {
+          left: 15px;
+          font-size: 20px;
+        }
+      }
+
+      /* Custom Alert */
+      .alert-overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        z-index: 1000;
+      }
+
+      .alert-overlay.show {
+        display: flex;
+      }
+
+      .alert-box {
+        width: 100%;
+        max-width: 350px;
+        background-color: white;
+        padding: 30px;
+        border-radius: 18px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        animation: popUp 0.3s ease;
+      }
+
+      .alert-icon {
+        font-size: 45px;
+        margin-bottom: 10px;
+      }
+
+      .alert-box h2 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .alert-box p {
+        color: #666;
+        margin-bottom: 25px;
+        line-height: 1.5;
+      }
+
+      .alert-box button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        background-color: #6a0dad;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .alert-box button:hover {
+        background-color: #520a87;
+      }
+
+      @keyframes popUp {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Page header -->
+    <header>
+      <a href="Home.html" class="back-link">←</a>
+      <h1>⚡ Apex Electricity</h1>
+    </header>
+
+    <!-- Main content -->
+    <main>
+      <div class="meter-card">
+        <!-- Page heading -->
+        <div class="meter-heading">
+          <div class="meter-icon">⚡</div>
+          <h2>Add a Meter</h2>
+          <p>Save your electricity meter for faster and easier access.</p>
+        </div>
+
+        <!-- Add meter form -->
+        <form id="meter-form">
+          <div class="input-group">
+            <label for="meter-name">
+              Meter Name
+              <span class="label-hint">— e.g. Home, Office, or Shop</span>
+            </label>
+            <input
+              type="text"
+              id="meter-name"
+              placeholder="Enter a name for this meter"
+              required
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="meter-number">
+              Meter Number
+              <span class="label-hint">— The unique number on your meter</span>
+            </label>
+            <input
+              type="text"
+              id="meter-number"
+              placeholder="Enter your meter number"
+              required
+            />
+          </div>
+
+          <button type="submit" class="save-meter-btn">Save Meter ⚡</button>
+        </form>
+      </div>
+    </main>
+
+    <!-- Bottom navigation -->
+    <nav class="bottom-nav">
+      <a href="Home.html">
+        🏠
+        <span>Home</span>
+      </a>
+
+      <a href="Track.html">
+        📊
+        <span>Usage</span>
+      </a>
+
+      <a href="AddMeter.html" class="active">
+        ⚡
+        <span>Meters</span>
+      </a>
+
+      <a href="Profile.html">
+        👤
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <!-- Custom Alert Box -->
+    <div class="alert-overlay" id="alert-overlay">
+      <div class="alert-box">
+        <div class="alert-icon" id="alert-icon">⚡</div>
+        <h2 id="alert-title">Message</h2>
+        <p id="alert-message"></p>
+        <button id="alert-button">OK</button>
+      </div>
+    </div>
+
+    <!-- Add this to the <head> section -->
+    <script src="notifications.js"></script>
+
+    <!-- Update the JavaScript section -->
+    <script>
+      const alertOverlay = document.getElementById("alert-overlay");
+      const alertTitle = document.getElementById("alert-title");
+      const alertMessage = document.getElementById("alert-message");
+      const alertButton = document.getElementById("alert-button");
+
+      // Show a custom alert box
+      function showAlert(title, message, callback) {
+        alertTitle.textContent = title;
+        alertMessage.textContent = message;
+        alertOverlay.classList.add("show");
+
+        alertButton.onclick = function () {
+          alertOverlay.classList.remove("show");
+
+          if (callback) {
+            callback();
+          }
+        };
+      }
+
+      // Get the meter form
+      const meterForm = document.getElementById("meter-form");
+      const meterNameInput = document.getElementById("meter-name");
+      const meterNumberInput = document.getElementById("meter-number");
+
+      // Listen for form submission
+      meterForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const meterName = meterNameInput.value.trim();
+        const meterNumber = meterNumberInput.value.trim();
+
+        // Validate inputs
+        if (meterName === "" || meterNumber === "") {
+          showAlert("Missing Information ⚠️", "Please fill in all fields.");
+          return;
+        }
+
+        // Get existing meters
+        const savedMeters = localStorage.getItem("powerWiseMeters");
+        const meters = savedMeters ? JSON.parse(savedMeters) : [];
+
+        // Check if this meter already exists
+        const meterExists = meters.some(function (meter) {
+          return meter.number === meterNumber;
+        });
+
+        if (meterExists) {
+          showAlert("Error ⚠️", "This meter has already been added!");
+          return;
+        }
+
+        // Create and save the new meter
+        const newMeter = {
+          name: meterName,
+          number: meterNumber,
+          dateAdded: new Date().toISOString(),
+        };
+
+        meters.push(newMeter);
+        localStorage.setItem("powerWiseMeters", JSON.stringify(meters));
+
+        // ✅ ADD NOTIFICATION
+        addNotification(
+          "⚡ Meter Added",
+          `New meter "${meterName}" (${meterNumber}) has been added successfully.`,
+          "system",
+          "⚡",
+        );
+
+        // Show success message before going home
+        showAlert("Successful! ⚡", "Meter added successfully!", function () {
+          window.location.href = "Home.html";
+        });
+      });
+    </script>
+  </body>
+</html>

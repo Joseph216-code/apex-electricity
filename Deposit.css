@@ -1,0 +1,238 @@
+/* Basic reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Page styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f3f7;
+  color: #333;
+  min-height: 100vh;
+}
+
+/* Header */
+header {
+  background: linear-gradient(135deg, #2d0a4a, #6a0dad);
+  color: white;
+  padding: 18px 7%;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+header h1 {
+  font-size: 22px;
+}
+
+.back-btn {
+  color: white;
+  text-decoration: none;
+  font-size: 28px;
+}
+
+/* Main content */
+main {
+  max-width: 500px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+/* Deposit card */
+.deposit-card {
+  background-color: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Heading */
+.deposit-heading {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.deposit-icon {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+.deposit-heading h2 {
+  color: #2d0a4a;
+  margin-bottom: 8px;
+}
+
+.deposit-heading p {
+  color: #777;
+  line-height: 1.5;
+}
+
+/* Current balance */
+.current-balance {
+  background-color: #f3e8ff;
+  padding: 18px;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.current-balance span {
+  font-size: 13px;
+  color: #666;
+}
+
+.current-balance h3 {
+  color: #6a0dad;
+  font-size: 28px;
+  margin-top: 5px;
+}
+
+/* Form */
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.amount-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding-left: 14px;
+}
+
+.amount-input:focus-within {
+  border-color: #6a0dad;
+}
+
+.amount-input span {
+  font-size: 18px;
+  font-weight: bold;
+  color: #6a0dad;
+}
+
+.amount-input input {
+  width: 100%;
+  padding: 14px 10px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}
+
+/* Deposit button */
+.deposit-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background-color: #6a0dad;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.deposit-btn:hover {
+  background-color: #520a87;
+}
+
+/* Cancel link */
+.cancel-link {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  color: #6a0dad;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Mobile adjustments */
+@media (max-width: 480px) {
+  main {
+    padding: 25px 15px;
+  }
+
+  .deposit-card {
+    padding: 25px 20px;
+  }
+}
+
+/* ============================================ */
+/* Custom Alert (matching other pages)          */
+/* ============================================ */
+.alert-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.alert-overlay.show {
+  display: flex;
+}
+
+.alert-box {
+  width: 100%;
+  max-width: 350px;
+  background-color: white;
+  padding: 30px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  animation: popUp 0.3s ease;
+}
+
+.alert-icon {
+  font-size: 45px;
+  margin-bottom: 10px;
+}
+
+.alert-box h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.alert-box p {
+  color: #666;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.alert-box button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background-color: #6a0dad;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.alert-box button:hover {
+  background-color: #520a87;
+}
+
+@keyframes popUp {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

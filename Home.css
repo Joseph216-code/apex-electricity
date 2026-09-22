@@ -1,0 +1,342 @@
+/* Remove default spacing and make sizing easier */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Main page styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f3f7;
+  color: #333;
+  padding-bottom: 80px;
+}
+
+/* Top navigation */
+header {
+  background: linear-gradient(135deg, #2d0a4a, #6a0dad);
+  color: white;
+  padding: 18px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo and app name */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo {
+  font-size: 28px;
+}
+
+.brand h1 {
+  font-size: 22px;
+}
+
+/* Header buttons */
+.header-icons {
+  display: flex;
+  gap: 10px;
+}
+
+.notification-btn,
+.profile-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Main content area */
+main {
+  max-width: 900px;
+  margin: auto;
+  padding: 30px 20px;
+}
+
+/* Welcome section */
+.welcome-section {
+  margin-bottom: 25px;
+}
+
+.welcome-section h2 {
+  color: #2d0a4a;
+  margin-bottom: 8px;
+}
+
+.welcome-section p {
+  color: #666;
+}
+
+/* Electricity overview card */
+.electricity-card {
+  background-color: white;
+  padding: 25px;
+  border-radius: 16px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.card-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-heading p {
+  color: #777;
+  margin-top: 6px;
+}
+
+/* Add meter button */
+.add-meter-btn {
+  background-color: #6a0dad;
+  color: white;
+  border: none;
+  padding: 11px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.add-meter-btn:hover {
+  background-color: #520a87;
+}
+
+/* Statistics section */
+.stats-section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background-color: white;
+  padding: 22px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.stat-icon {
+  font-size: 25px;
+}
+
+.stat-card h3 {
+  font-size: 24px;
+  color: #6a0dad;
+  margin: 8px 0;
+}
+
+.stat-card p {
+  color: #777;
+}
+
+/* Quick actions */
+.quick-actions h2 {
+  color: #2d0a4a;
+  margin-bottom: 15px;
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.action-btn {
+  background-color: white;
+  border: none;
+  border-radius: 14px;
+  padding: 20px 10px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.action-btn span {
+  display: block;
+  font-size: 13px;
+  margin-top: 8px;
+  color: #555;
+}
+
+.action-btn:hover {
+  transform: translateY(-3px);
+}
+
+/* Responsive design for phones */
+@media (max-width: 600px) {
+  header {
+    padding: 15px 20px;
+  }
+
+  main {
+    padding: 25px 15px;
+  }
+
+  .card-heading {
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .add-meter-btn {
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .stats-section {
+    gap: 12px;
+  }
+
+  .action-buttons {
+    gap: 10px;
+  }
+
+  .action-btn {
+    padding: 16px 5px;
+    font-size: 20px;
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+.action-btn {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.profile-btn {
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Amount and hide/reveal button */
+.amount-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Eye button */
+.toggle-balance {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 3px;
+}
+
+.meter-button {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.meter-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Budget button section */
+.budget-section .action-buttons {
+  grid-template-columns: 1fr;
+  margin-top: 20px;
+}
+
+.budget-btn {
+  width: 100%;
+  background-color: #f1e8f5;
+  border: 2px solid #6a0dad;
+  color: #2d0a4a;
+  padding: 18px;
+  font-size: 22px;
+}
+
+/* Budget button text */
+.budget-btn span {
+  color: #6a0dad;
+  font-weight: bold;
+}
+
+/* Budget button hover effect */
+.budget-btn:hover {
+  background-color: #6a0dad;
+  color: white;
+}
+
+.budget-btn:hover span {
+  color: white;
+}
+
+/* Add these styles to the bottom of Home.css */
+
+/* Notification Badge */
+.notification-btn {
+  position: relative;
+  text-decoration: none;
+  color: white;
+  font-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background: #3b82f6;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border: 2px solid #2d0a4a;
+  animation: badgePop 0.3s ease;
+}
+
+@keyframes badgePop {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Pulse animation for new notifications */
+.notification-badge.pulse {
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}

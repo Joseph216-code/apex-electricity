@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>PowerWise - My Meters</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f3f7;
+        color: #333;
+      }
+
+      header {
+        background: linear-gradient(135deg, #2d0a4a, #6a0dad);
+        color: white;
+        padding: 18px 7%;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      header h1 {
+        font-size: 22px;
+      }
+
+      .back-btn {
+        color: white;
+        text-decoration: none;
+        font-size: 28px;
+      }
+
+      main {
+        max-width: 700px;
+        margin: auto;
+        padding: 30px 20px;
+      }
+
+      .page-heading {
+        margin-bottom: 25px;
+      }
+
+      .page-heading h2 {
+        color: #2d0a4a;
+        margin-bottom: 8px;
+      }
+
+      .page-heading p {
+        color: #777;
+      }
+
+      .meters-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .meter-item {
+        background-color: white;
+        padding: 20px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .meter-icon {
+        font-size: 30px;
+      }
+
+      .meter-info h3 {
+        color: #2d0a4a;
+        margin-bottom: 5px;
+      }
+
+      .meter-info p {
+        color: #777;
+      }
+
+      .empty-message {
+        background-color: white;
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+      }
+
+      .empty-message p {
+        margin-bottom: 15px;
+        color: #777;
+      }
+
+      .empty-message a {
+        display: inline-block;
+        background-color: #6a0dad;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <a href="Home.html" class="back-btn">←</a>
+      <h1>⚡ My Meters</h1>
+    </header>
+
+    <main>
+      <div class="page-heading">
+        <h2>Saved Meters</h2>
+        <p>Manage your saved electricity meters.</p>
+      </div>
+
+      <!-- Saved meters will appear here -->
+      <div id="meters-list" class="meters-list"></div>
+    </main>
+
+    <script>
+      // Get the area where the meters will be displayed
+      const metersList = document.getElementById("meters-list");
+
+      // Get the saved meters from localStorage
+      const savedMeters = localStorage.getItem("powerWiseMeters");
+
+      // Convert the saved data into an array
+      const meters = savedMeters ? JSON.parse(savedMeters) : [];
+
+      // Check if there are no saved meters
+      if (meters.length === 0) {
+        metersList.innerHTML = `
+    <div class="empty-message">
+      <p>⚡ No meters saved yet.</p>
+      <a href="AddMeter.html">+ Add Your First Meter</a>
+    </div>
+  `;
+      } else {
+        // Display each saved meter
+        meters.forEach(function (meter) {
+          const meterCard = document.createElement("div");
+          meterCard.classList.add("meter-item");
+
+          meterCard.innerHTML = `
+      <div class="meter-icon">⚡</div>
+      <div class="meter-info">
+        <h3>${meter.name}</h3>
+        <p>Meter Number: ${meter.number}</p>
+      </div>
+    `;
+
+          metersList.appendChild(meterCard);
+        });
+      }
+    </script>
+  </body>
+</html>

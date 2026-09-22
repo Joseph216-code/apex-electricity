@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Total Spent</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: #f5f3f7;
+        color: #333;
+        font-family: Arial, sans-serif;
+        padding-bottom: 30px;
+      }
+      header {
+        align-items: center;
+        background: linear-gradient(135deg, #2d0a4a, #6a0dad);
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        padding: 18px 7%;
+      }
+      header h1 {
+        font-size: 22px;
+      }
+      .back-link {
+        color: white;
+        font-size: 24px;
+        text-decoration: none;
+      }
+      main {
+        margin: auto;
+        max-width: 760px;
+        padding: 30px 20px;
+      }
+      .summary {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        margin-bottom: 24px;
+        padding: 25px;
+      }
+      .summary p {
+        color: #777;
+        margin-bottom: 8px;
+      }
+      .summary h2 {
+        color: #6a0dad;
+        font-size: 32px;
+      }
+      .history-heading {
+        color: #2d0a4a;
+        margin-bottom: 14px;
+      }
+      .transaction-list {
+        display: grid;
+        gap: 12px;
+        list-style: none;
+      }
+      .transaction {
+        align-items: center;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        display: flex;
+        justify-content: space-between;
+        padding: 18px;
+      }
+      .transaction-name {
+        font-weight: bold;
+        margin-bottom: 6px;
+      }
+      .transaction-meta {
+        color: #777;
+        font-size: 13px;
+      }
+      .transaction-amount {
+        color: #6a0dad;
+        font-size: 17px;
+        font-weight: bold;
+      }
+      .empty-state {
+        background: white;
+        border-radius: 12px;
+        color: #777;
+        padding: 28px;
+        text-align: center;
+      }
+      @media (max-width: 480px) {
+        main {
+          padding: 20px 15px;
+        }
+        header {
+          padding: 15px 20px;
+        }
+        .transaction {
+          gap: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a class="back-link" href="Home.html" aria-label="Back to home"
+        >&#8592;</a
+      >
+      <h1>Apex Electricity</h1>
+      <span aria-hidden="true">&#128176;</span>
+    </header>
+    <main>
+      <section class="summary">
+        <p>Total Spent</p>
+        <h2 id="total-spent">₦0</h2>
+      </section>
+      <h2 class="history-heading">Transaction History</h2>
+      <ul class="transaction-list" id="transaction-list"></ul>
+    </main>
+    <script>
+      const savedTransactions = localStorage.getItem("powerWiseTransactions");
+      const transactions = savedTransactions
+        ? JSON.parse(savedTransactions)
+        : [];
+      const totalSpent = transactions.reduce(function (total, transaction) {
+        return total + Number(transaction.amount);
+      }, 0);
+      const totalElement = document.getElementById("total-spent");
+      const transactionList = document.getElementById("transaction-list");
+
+      totalElement.textContent = "₦" + totalSpent.toLocaleString();
+
+      if (transactions.length === 0) {
+        transactionList.innerHTML =
+          '<li class="empty-state">No transactions yet.</li>';
+      } else {
+        transactions.forEach(function (transaction) {
+          const item = document.createElement("li");
+          const date = new Date(transaction.date).toLocaleDateString(
+            undefined,
+            {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            },
+          );
+          item.className = "transaction";
+          item.innerHTML =
+            '<div><p class="transaction-name">' +
+            transaction.meter +
+            '</p><p class="transaction-meta">' +
+            date +
+            " · " +
+            transaction.status +
+            '</p></div><strong class="transaction-amount">₦' +
+            Number(transaction.amount).toLocaleString() +
+            "</strong>";
+          transactionList.appendChild(item);
+        });
+      }
+    </script>
+  </body>
+</html>

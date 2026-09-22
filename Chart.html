@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Usage Chart</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f3f7;
+        color: #333;
+        padding-bottom: 30px;
+      }
+
+      /* Header */
+      header {
+        background: linear-gradient(135deg, #2d0a4a, #6a0dad);
+        color: white;
+        padding: 18px 7%;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      header h1 {
+        font-size: 22px;
+      }
+
+      .back-btn {
+        color: white;
+        text-decoration: none;
+        font-size: 28px;
+      }
+
+      /* Main content */
+      main {
+        max-width: 900px;
+        margin: auto;
+        padding: 30px 20px;
+      }
+
+      .chart-card {
+        background-color: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .chart-header {
+        text-align: center;
+        margin-bottom: 25px;
+      }
+
+      .chart-header h2 {
+        color: #2d0a4a;
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+
+      .chart-header p {
+        color: #777;
+        font-size: 14px;
+      }
+
+      .meter-info {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+        background-color: #f9f6fc;
+        padding: 15px 20px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+      }
+
+      .meter-info .info-item {
+        text-align: center;
+      }
+
+      .meter-info .info-item .label {
+        font-size: 12px;
+        color: #777;
+        display: block;
+      }
+
+      .meter-info .info-item .value {
+        font-size: 18px;
+        font-weight: bold;
+        color: #6a0dad;
+      }
+
+      /* Chart container */
+      .chart-container {
+        position: relative;
+        width: 100%;
+        height: 350px;
+        margin: 20px 0 30px;
+        padding: 10px;
+        background: #f9f6fc;
+        border-radius: 12px;
+        overflow-x: auto;
+      }
+
+      .chart-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-width: 600px;
+      }
+
+      /* Simple bar chart */
+      .bar-chart {
+        display: flex;
+        align-items: flex-end;
+        height: 280px;
+        padding-bottom: 30px;
+        position: relative;
+        gap: 2px;
+      }
+
+      .bar-chart .bar-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+        justify-content: flex-end;
+        min-width: 20px;
+      }
+
+      .bar-chart .bar {
+        width: 100%;
+        max-width: 30px;
+        min-height: 4px;
+        border-radius: 4px 4px 0 0;
+        background: linear-gradient(180deg, #6a0dad, #a855f7);
+        transition: height 0.6s ease;
+        position: relative;
+        cursor: pointer;
+      }
+
+      .bar-chart .bar:hover {
+        opacity: 0.8;
+        transform: scaleX(1.1);
+      }
+
+      .bar-chart .bar-label {
+        font-size: 9px;
+        color: #777;
+        margin-top: 6px;
+        text-align: center;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .bar-chart .bar-value {
+        font-size: 10px;
+        font-weight: bold;
+        color: #6a0dad;
+        margin-bottom: 4px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .bar-chart .bar-wrapper:hover .bar-value {
+        opacity: 1;
+      }
+
+      .bar-chart .bar-wrapper:hover .bar {
+        transform: scaleY(1.02) scaleX(1.05);
+      }
+
+      /* Chart legend */
+      .chart-legend {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-top: 15px;
+      }
+
+      .chart-legend .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: #555;
+      }
+
+      .chart-legend .legend-color {
+        width: 20px;
+        height: 12px;
+        border-radius: 3px;
+        background: linear-gradient(180deg, #6a0dad, #a855f7);
+      }
+
+      /* Stats summary */
+      .stats-summary {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-top: 25px;
+        padding-top: 25px;
+        border-top: 1px solid #eee;
+      }
+
+      .stats-summary .stat {
+        text-align: center;
+        background-color: #f9f6fc;
+        padding: 15px 10px;
+        border-radius: 10px;
+      }
+
+      .stats-summary .stat .number {
+        font-size: 22px;
+        font-weight: bold;
+        color: #6a0dad;
+      }
+
+      .stats-summary .stat .label {
+        font-size: 12px;
+        color: #777;
+        margin-top: 4px;
+      }
+
+      /* Demo banner */
+      .demo-banner {
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        border: 2px solid #f59e0b;
+        border-radius: 12px;
+        padding: 15px 20px;
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .demo-banner .demo-icon {
+        font-size: 28px;
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .demo-banner p {
+        color: #92400e;
+        font-size: 14px;
+      }
+
+      .demo-banner .highlight {
+        font-weight: bold;
+        color: #6a0dad;
+      }
+
+      /* Mobile adjustments */
+      @media (max-width: 600px) {
+        main {
+          padding: 20px 15px;
+        }
+
+        .chart-card {
+          padding: 20px 15px;
+        }
+
+        .meter-info {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .stats-summary {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .chart-container {
+          height: 280px;
+        }
+
+        .bar-chart {
+          height: 220px;
+        }
+
+        .bar-chart .bar {
+          max-width: 20px;
+        }
+      }
+
+      @media (max-width: 400px) {
+        .stats-summary {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      /* No data state */
+      .no-data {
+        text-align: center;
+        padding: 40px 20px;
+      }
+
+      .no-data .no-data-icon {
+        font-size: 60px;
+        display: block;
+        margin-bottom: 15px;
+      }
+
+      .no-data h3 {
+        color: #2d0a4a;
+        margin-bottom: 10px;
+      }
+
+      .no-data p {
+        color: #777;
+        margin-bottom: 20px;
+      }
+
+      .no-data a {
+        display: inline-block;
+        padding: 12px 30px;
+        background-color: #6a0dad;
+        color: white;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: bold;
+      }
+
+      .no-data a:hover {
+        background-color: #520a87;
+      }
+
+      /* Custom Alert */
+      .alert-overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        z-index: 1000;
+      }
+
+      .alert-overlay.show {
+        display: flex;
+      }
+
+      .alert-box {
+        width: 100%;
+        max-width: 350px;
+        background-color: white;
+        padding: 30px;
+        border-radius: 18px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        animation: popUp 0.3s ease;
+      }
+
+      .alert-icon {
+        font-size: 45px;
+        margin-bottom: 10px;
+      }
+
+      .alert-box h2 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .alert-box p {
+        color: #666;
+        margin-bottom: 25px;
+        line-height: 1.5;
+      }
+
+      .alert-box button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        background-color: #6a0dad;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .alert-box button:hover {
+        background-color: #520a87;
+      }
+
+      @keyframes popUp {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header>
+      <a href="Track.html" class="back-btn">←</a>
+      <h1>⚡ Usage Analytics</h1>
+    </header>
+
+    <main>
+      <div class="chart-card">
+        <div class="chart-header">
+          <h2>📊 Electricity Usage Chart</h2>
+          <p>30-day consumption pattern for your selected meter</p>
+        </div>
+
+        <!-- Meter info -->
+        <div class="meter-info" id="meter-info">
+          <div class="info-item">
+            <span class="label">Meter Name</span>
+            <span class="value" id="meter-name">—</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Meter Number</span>
+            <span class="value" id="meter-number">—</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Total Usage</span>
+            <span class="value" id="meter-total">—</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Est. Cost</span>
+            <span class="value" id="meter-cost">—</span>
+          </div>
+        </div>
+
+        <!-- Chart -->
+        <div id="chart-area">
+          <div class="chart-container" id="chart-container">
+            <div class="chart-wrapper" id="chart-wrapper">
+              <div class="bar-chart" id="bar-chart"></div>
+            </div>
+          </div>
+
+          <!-- Legend -->
+          <div class="chart-legend">
+            <span class="legend-item">
+              <span class="legend-color"></span>
+              Daily Usage (kWh)
+            </span>
+          </div>
+        </div>
+
+        <!-- Stats summary -->
+        <div class="stats-summary">
+          <div class="stat">
+            <div class="number" id="stat-max">0</div>
+            <div class="label">Peak Usage (kWh)</div>
+          </div>
+          <div class="stat">
+            <div class="number" id="stat-min">0</div>
+            <div class="label">Lowest Usage (kWh)</div>
+          </div>
+          <div class="stat">
+            <div class="number" id="stat-avg">0</div>
+            <div class="label">Average (kWh)</div>
+          </div>
+          <div class="stat">
+            <div class="number" id="stat-total">0</div>
+            <div class="label">Total Usage (kWh)</div>
+          </div>
+        </div>
+
+        <!-- Demo Banner -->
+        <!-- <div class="demo-banner">
+          <span class="demo-icon">🔬</span>
+          <p>
+            <strong>Demo Mode:</strong> This chart shows
+            <span class="highlight">simulated usage data</span> to demonstrate
+            the feature. In production, this would display your actual meter
+            readings from the smart meter.
+          </p>
+        </div> -->
+      </div>
+    </main>
+
+    <script>
+      // Alert elements
+      const alertOverlay = document.getElementById("alert-overlay");
+      const alertTitle = document.getElementById("alert-title");
+      const alertMessage = document.getElementById("alert-message");
+      const alertButton = document.getElementById("alert-button");
+
+      function showAlert(title, message, callback) {
+        alertTitle.textContent = title;
+        alertMessage.textContent = message;
+        alertOverlay.classList.add("show");
+
+        alertButton.onclick = function () {
+          alertOverlay.classList.remove("show");
+          if (callback) callback();
+        };
+      }
+
+      // Get chart data from localStorage
+      function getChartData() {
+        const data = localStorage.getItem("powerWiseChartData");
+        return data ? JSON.parse(data) : null;
+      }
+
+      // Render the bar chart
+      function renderChart(data) {
+        const barChart = document.getElementById("bar-chart");
+        barChart.innerHTML = "";
+
+        if (!data || !data.data || data.data.length === 0) {
+          barChart.innerHTML =
+            '<div class="no-data"><span class="no-data-icon">📊</span><h3>No Data Available</h3><p>Please go back and generate usage data first.</p><a href="Track.html">← Back to Track</a></div>';
+          return;
+        }
+
+        // Find max usage for scaling
+        const maxUsage = Math.max(...data.data.map((d) => d.usage)) * 1.2;
+
+        // Render each bar
+        data.data.forEach(function (item) {
+          const wrapper = document.createElement("div");
+          wrapper.className = "bar-wrapper";
+
+          const valueLabel = document.createElement("div");
+          valueLabel.className = "bar-value";
+          valueLabel.textContent = item.usage.toFixed(1);
+
+          const bar = document.createElement("div");
+          bar.className = "bar";
+          const heightPercent = (item.usage / maxUsage) * 100;
+          bar.style.height = Math.max(4, heightPercent) + "%";
+
+          // Color based on usage level
+          if (item.usage > maxUsage * 0.7) {
+            bar.style.background = "linear-gradient(180deg, #dc2626, #ef4444)";
+          } else if (item.usage > maxUsage * 0.4) {
+            bar.style.background = "linear-gradient(180deg, #d97706, #f59e0b)";
+          }
+
+          const label = document.createElement("div");
+          label.className = "bar-label";
+          label.textContent = item.day || item.date.substring(5);
+
+          wrapper.appendChild(valueLabel);
+          wrapper.appendChild(bar);
+          wrapper.appendChild(label);
+          barChart.appendChild(wrapper);
+        });
+
+        // Update stats
+        const usages = data.data.map((d) => d.usage);
+        const max = Math.max(...usages);
+        const min = Math.min(...usages);
+        const avg = usages.reduce((a, b) => a + b, 0) / usages.length;
+        const total = usages.reduce((a, b) => a + b, 0);
+
+        document.getElementById("stat-max").textContent = max.toFixed(1);
+        document.getElementById("stat-min").textContent = min.toFixed(1);
+        document.getElementById("stat-avg").textContent = avg.toFixed(1);
+        document.getElementById("stat-total").textContent = total.toFixed(1);
+
+        // Update meter info
+        document.getElementById("meter-name").textContent =
+          data.meterName || "—";
+        document.getElementById("meter-number").textContent =
+          data.meterNumber || "—";
+        document.getElementById("meter-total").textContent =
+          total.toFixed(1) + " kWh";
+        document.getElementById("meter-cost").textContent =
+          "₦" + (total * 45).toFixed(2);
+      }
+
+      // Load data on page load
+      const chartData = getChartData();
+
+      if (chartData) {
+        renderChart(chartData);
+      } else {
+        document.getElementById("chart-area").innerHTML = `
+          <div class="no-data">
+            <span class="no-data-icon">📊</span>
+            <h3>No Data Available</h3>
+            <p>Please go back to the Track page and select a meter to generate usage data.</p>
+            <a href="Track.html">← Back to Track</a>
+          </div>
+        `;
+      }
+
+      // Also listen for storage changes (if data is updated from another tab)
+      window.addEventListener("storage", function (e) {
+        if (e.key === "powerWiseChartData") {
+          const newData = e.newValue ? JSON.parse(e.newValue) : null;
+          if (newData) {
+            renderChart(newData);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

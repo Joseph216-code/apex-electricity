@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Track Usage</title>
+
+    <style>
+      /* Basic page setup */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f3f7;
+        color: #333;
+        padding-bottom: 80px;
+      }
+
+      /* Header */
+      header {
+        background: linear-gradient(135deg, #2d0a4a, #6a0dad);
+        color: white;
+        padding: 20px;
+        text-align: center;
+        position: relative;
+      }
+
+      header .back-link {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        text-decoration: none;
+        font-size: 24px;
+      }
+
+      header h1 {
+        font-size: 22px;
+      }
+
+      /* Main content */
+      main {
+        max-width: 700px;
+        margin: auto;
+        padding: 30px 20px;
+      }
+
+      /* Usage card */
+      .usage-card {
+        background-color: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      /* Heading */
+      .usage-heading {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .usage-heading .usage-icon {
+        font-size: 50px;
+        margin-bottom: 10px;
+      }
+
+      .usage-heading h2 {
+        color: #2d0a4a;
+        margin-bottom: 8px;
+        font-size: 24px;
+      }
+
+      .usage-heading p {
+        color: #777;
+        line-height: 1.5;
+        font-size: 14px;
+      }
+
+      /* Form fields */
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 7px;
+        font-size: 14px;
+      }
+
+      .label-hint {
+        font-weight: normal;
+        color: #999;
+        font-size: 12px;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 13px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 16px;
+        outline: none;
+        background-color: white;
+        transition:
+          border-color 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      input:focus,
+      select:focus {
+        border-color: #6a0dad;
+        box-shadow: 0 0 5px rgba(106, 13, 173, 0.2);
+      }
+
+      input::placeholder {
+        color: #bbb;
+      }
+
+      /* Button row */
+      .button-row {
+        display: flex;
+        gap: 12px;
+      }
+
+      .button-row button {
+        flex: 1;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .calculate-btn {
+        background-color: #6a0dad;
+        color: white;
+      }
+
+      .calculate-btn:hover {
+        background-color: #520a87;
+      }
+
+      .view-chart-btn {
+        background-color: #2d0a4a;
+        color: white;
+      }
+
+      .view-chart-btn:hover {
+        background-color: #1d0630;
+      }
+
+      .view-chart-btn:disabled {
+        background-color: #aaa;
+        cursor: not-allowed;
+      }
+
+      /* Result area */
+      .result-box {
+        display: none;
+        text-align: center;
+        background: linear-gradient(135deg, #f3e8ff, #e8d5f5);
+        padding: 25px;
+        border-radius: 12px;
+        margin-top: 25px;
+        animation: slideUp 0.4s ease;
+      }
+
+      .result-box .result-icon {
+        font-size: 40px;
+        margin-bottom: 8px;
+      }
+
+      .result-box h3 {
+        color: #2d0a4a;
+        margin-bottom: 8px;
+        font-size: 18px;
+      }
+
+      .usage-result {
+        font-size: 32px;
+        font-weight: bold;
+        color: #6a0dad;
+      }
+
+      .usage-details {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(106, 13, 173, 0.15);
+        font-size: 14px;
+        color: #555;
+      }
+
+      .usage-details span {
+        font-weight: bold;
+        color: #2d0a4a;
+      }
+
+      /* Message when no meters exist */
+      .no-meter-message {
+        text-align: center;
+        color: #777;
+        padding: 20px;
+        background-color: #f5f3f7;
+        border-radius: 10px;
+        margin-bottom: 20px;
+      }
+
+      .no-meter-message .empty-icon {
+        font-size: 40px;
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      .no-meter-message a {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #6a0dad;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+      }
+
+      .no-meter-message a:hover {
+        background-color: #520a87;
+      }
+
+      /* Quick stats */
+      .quick-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 25px;
+        padding-top: 25px;
+        border-top: 1px solid #eee;
+      }
+
+      .stat-item {
+        text-align: center;
+        background-color: #f9f6fc;
+        padding: 15px 10px;
+        border-radius: 10px;
+      }
+
+      .stat-item .stat-number {
+        font-size: 20px;
+        font-weight: bold;
+        color: #6a0dad;
+      }
+
+      .stat-item .stat-label {
+        font-size: 11px;
+        color: #777;
+        margin-top: 4px;
+      }
+
+      /* Bottom navigation */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        display: flex;
+        justify-content: space-around;
+        padding: 10px 5%;
+        box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .bottom-nav a {
+        text-decoration: none;
+        color: #777;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 18px;
+        transition: color 0.3s ease;
+      }
+
+      .bottom-nav a:hover {
+        color: #6a0dad;
+      }
+
+      .bottom-nav span {
+        font-size: 11px;
+        margin-top: 3px;
+      }
+
+      .bottom-nav a.active {
+        color: #6a0dad;
+      }
+
+      /* Mobile adjustments */
+      @media (max-width: 600px) {
+        main {
+          padding: 20px 15px;
+        }
+
+        .usage-card {
+          padding: 25px 20px;
+        }
+
+        header .back-link {
+          left: 15px;
+          font-size: 20px;
+        }
+
+        .usage-result {
+          font-size: 26px;
+        }
+
+        .button-row {
+          flex-direction: column;
+        }
+
+        .quick-stats {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .quick-stats .stat-item:last-child {
+          grid-column: span 2;
+        }
+      }
+
+      @media (max-width: 400px) {
+        .quick-stats {
+          grid-template-columns: 1fr;
+        }
+
+        .quick-stats .stat-item:last-child {
+          grid-column: span 1;
+        }
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(15px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Custom Alert */
+      .alert-overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        z-index: 1000;
+      }
+
+      .alert-overlay.show {
+        display: flex;
+      }
+
+      .alert-box {
+        width: 100%;
+        max-width: 350px;
+        background-color: white;
+        padding: 30px;
+        border-radius: 18px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        animation: popUp 0.3s ease;
+      }
+
+      .alert-icon {
+        font-size: 45px;
+        margin-bottom: 10px;
+      }
+
+      .alert-box h2 {
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .alert-box p {
+        color: #666;
+        margin-bottom: 25px;
+        line-height: 1.5;
+      }
+
+      .alert-box button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        background-color: #6a0dad;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .alert-box button:hover {
+        background-color: #520a87;
+      }
+
+      @keyframes popUp {
+        from {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header>
+      <a href="Home.html" class="back-link">←</a>
+      <h1>⚡ Apex Electricity</h1>
+    </header>
+
+    <main>
+      <div class="usage-card">
+        <!-- Page heading -->
+        <div class="usage-heading">
+          <div class="usage-icon">📊</div>
+          <h2>Track Your Usage</h2>
+          <p>
+            Select a meter to view detailed usage analytics and consumption
+            patterns.
+          </p>
+        </div>
+
+        <!-- Message shown when there are no saved meters -->
+        <div class="no-meter-message" id="no-meter-message">
+          <span class="empty-icon">⚡</span>
+          <p>No meters found. Please add a meter first.</p>
+          <a href="AddMeter.html">+ Add Meter</a>
+        </div>
+
+        <!-- Usage form -->
+        <form id="usage-form">
+          <div class="input-group">
+            <label for="meter-select">
+              Select Meter
+              <span class="label-hint"
+                >— Choose the meter you want to analyze</span
+              >
+            </label>
+            <select id="meter-select" required>
+              <option value="">Choose a meter</option>
+            </select>
+          </div>
+
+          <div class="button-row">
+            <button type="submit" class="calculate-btn" id="view-usage-btn">
+              View Usage 📊
+            </button>
+            <button
+              type="button"
+              class="view-chart-btn"
+              id="view-chart-btn"
+              disabled
+            >
+              View Chart 📈
+            </button>
+          </div>
+        </form>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats" id="quick-stats">
+          <div class="stat-item">
+            <div class="stat-number" id="total-usage">0</div>
+            <div class="stat-label">Total Usage (kWh)</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" id="avg-usage">0</div>
+            <div class="stat-label">Avg Daily (kWh)</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" id="days-tracked">0</div>
+            <div class="stat-label">Days Tracked</div>
+          </div>
+        </div>
+
+        <!-- Calculation result -->
+        <div class="result-box" id="result-box">
+          <div class="result-icon">⚡</div>
+          <h3>Current Usage Summary</h3>
+          <p class="usage-result" id="usage-result">0 kWh</p>
+          <div class="usage-details" id="usage-details">
+            <p>Meter: <span id="result-meter">—</span></p>
+            <p>Est. Cost: <span id="result-cost">₦0.00</span></p>
+            <p style="font-size: 12px; color: #999; margin-top: 8px">
+              Click "View Chart" for detailed analytics
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom navigation -->
+    <nav class="bottom-nav">
+      <a href="Home.html">
+        🏠
+        <span>Home</span>
+      </a>
+
+      <a href="Track.html" class="active">
+        📊
+        <span>Usage</span>
+      </a>
+
+      <a href="AddMeter.html">
+        ⚡
+        <span>Meters</span>
+      </a>
+
+      <a href="Profile.html">
+        👤
+        <span>Profile</span>
+      </a>
+    </nav>
+
+    <!-- Custom Alert Box -->
+    <div class="alert-overlay" id="alert-overlay">
+      <div class="alert-box">
+        <div class="alert-icon" id="alert-icon">⚡</div>
+        <h2 id="alert-title">Message</h2>
+        <p id="alert-message"></p>
+        <button id="alert-button">OK</button>
+      </div>
+    </div>
+
+    <script>
+      // Get the elements we need from the page
+      const usageForm = document.getElementById("usage-form");
+      const meterSelect = document.getElementById("meter-select");
+      const resultBox = document.getElementById("result-box");
+      const usageResult = document.getElementById("usage-result");
+      const noMeterMessage = document.getElementById("no-meter-message");
+      const viewChartBtn = document.getElementById("view-chart-btn");
+      const viewUsageBtn = document.getElementById("view-usage-btn");
+      const resultMeter = document.getElementById("result-meter");
+      const resultCost = document.getElementById("result-cost");
+      const totalUsageEl = document.getElementById("total-usage");
+      const avgUsageEl = document.getElementById("avg-usage");
+      const daysTrackedEl = document.getElementById("days-tracked");
+
+      // Alert elements
+      const alertOverlay = document.getElementById("alert-overlay");
+      const alertTitle = document.getElementById("alert-title");
+      const alertMessage = document.getElementById("alert-message");
+      const alertButton = document.getElementById("alert-button");
+
+      // Show a custom alert box
+      function showAlert(title, message, callback) {
+        alertTitle.textContent = title;
+        alertMessage.textContent = message;
+        alertOverlay.classList.add("show");
+
+        alertButton.onclick = function () {
+          alertOverlay.classList.remove("show");
+
+          if (callback) {
+            callback();
+          }
+        };
+      }
+
+      // Generate realistic demo data for a meter
+      function generateDemoData(meterName) {
+        const days = 30;
+        const data = [];
+        let currentUsage = 15 + Math.random() * 10;
+
+        for (let i = days; i >= 0; i--) {
+          const date = new Date();
+          date.setDate(date.getDate() - i);
+
+          // Daily usage with some variation
+          const variation = (Math.random() - 0.5) * 8;
+          currentUsage = Math.max(2, currentUsage + variation);
+          currentUsage = Math.round(currentUsage * 10) / 10;
+
+          data.push({
+            date: date.toISOString().split("T")[0],
+            usage: currentUsage,
+            day: date.toLocaleDateString(undefined, { weekday: "short" }),
+          });
+        }
+
+        return data;
+      }
+
+      // Get the saved meters from localStorage
+      const savedMeters = localStorage.getItem("powerWiseMeters");
+      const meters = savedMeters ? JSON.parse(savedMeters) : [];
+
+      // Add saved meters to the select dropdown
+      if (meters.length > 0) {
+        noMeterMessage.style.display = "none";
+        viewChartBtn.disabled = false;
+
+        meters.forEach(function (meter) {
+          const option = document.createElement("option");
+          option.value = meter.number;
+          option.textContent = meter.name + " (" + meter.number + ")";
+          meterSelect.appendChild(option);
+        });
+
+        // Enable view chart button when meter is selected
+        meterSelect.addEventListener("change", function () {
+          viewChartBtn.disabled = this.value === "";
+        });
+      } else {
+        viewChartBtn.disabled = true;
+      }
+
+      // Calculate and display usage for the selected meter
+      usageForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        if (meterSelect.value === "") {
+          showAlert(
+            "Select a Meter ⚠️",
+            "Please select a meter to view usage data.",
+          );
+          return;
+        }
+
+        // Find the selected meter
+        const selectedMeter = meters.find(function (meter) {
+          return meter.number === meterSelect.value;
+        });
+
+        if (!selectedMeter) {
+          showAlert("Error ⚠️", "Meter not found. Please try again.");
+          return;
+        }
+
+        // Generate demo data for this meter
+        const usageData = generateDemoData(selectedMeter.name);
+
+        // Calculate statistics
+        const totalUsage = usageData.reduce((sum, day) => sum + day.usage, 0);
+        const avgDaily = totalUsage / usageData.length;
+        const estCost = totalUsage * 45; // Assuming ₦45 per kWh
+
+        // Update stats
+        totalUsageEl.textContent = totalUsage.toFixed(1);
+        avgUsageEl.textContent = avgDaily.toFixed(1);
+        daysTrackedEl.textContent = usageData.length;
+
+        // Store the data for the chart page
+        localStorage.setItem(
+          "powerWiseChartData",
+          JSON.stringify({
+            meterName: selectedMeter.name,
+            meterNumber: selectedMeter.number,
+            data: usageData,
+            totalUsage: totalUsage,
+            avgDaily: avgDaily,
+            estCost: estCost,
+          }),
+        );
+
+        // Show result
+        usageResult.textContent = totalUsage.toFixed(1) + " kWh";
+        resultMeter.textContent = selectedMeter.name;
+        resultCost.textContent = "₦" + estCost.toFixed(2);
+        resultBox.style.display = "block";
+
+        // Enable chart button
+        viewChartBtn.disabled = false;
+
+        showAlert(
+          "Usage Data Loaded 📊",
+          `Showing usage data for ${selectedMeter.name}. Click "View Chart" for detailed analytics.`,
+        );
+      });
+
+      // View Chart button - navigate to chart page
+      viewChartBtn.addEventListener("click", function () {
+        if (meterSelect.value === "") {
+          showAlert(
+            "Select a Meter ⚠️",
+            "Please select a meter first to view the chart.",
+          );
+          return;
+        }
+
+        // Check if we have data
+        const chartData = localStorage.getItem("powerWiseChartData");
+        if (!chartData) {
+          showAlert(
+            "No Data 📊",
+            "Please click 'View Usage' first to generate usage data.",
+          );
+          return;
+        }
+
+        // Navigate to chart page
+        window.location.href = "Chart.html";
+      });
+
+      // If there's a meter selected by default, auto-load data
+      if (meters.length > 0 && meterSelect.value) {
+        // Trigger a click on view usage button after a short delay
+        setTimeout(function () {
+          viewUsageBtn.click();
+        }, 500);
+      }
+    </script>
+  </body>
+</html>

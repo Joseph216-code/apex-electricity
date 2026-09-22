@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Deposit</title>
+    <link rel="stylesheet" href="Deposit.css" />
+  </head>
+
+  <body>
+    <!-- Header -->
+    <header>
+      <a href="Home.html" class="back-btn">←</a>
+      <h1>⚡ Apex Electricity</h1>
+    </header>
+
+    <!-- Main content -->
+    <main>
+      <div class="deposit-card">
+        <div class="deposit-heading">
+          <div class="deposit-icon">💰</div>
+          <h2>Add Money</h2>
+          <p>
+            Add money to your Apex balance and use it to purchase electricity.
+          </p>
+        </div>
+
+        <!-- Current balance -->
+        <div class="current-balance">
+          <span>Current Balance</span>
+          <h3 id="current-balance">₦0.00</h3>
+        </div>
+
+        <!-- Deposit form -->
+        <form id="deposit-form">
+          <div class="input-group">
+            <label for="deposit-amount">Amount to Deposit</label>
+
+            <div class="amount-input">
+              <span>₦</span>
+              <input
+                type="number"
+                id="deposit-amount"
+                placeholder="Enter amount"
+                min="1"
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="deposit-btn">Deposit Money 💰</button>
+        </form>
+
+        <a href="Home.html" class="cancel-link">Cancel</a>
+      </div>
+    </main>
+
+    <!-- Custom Alert Box -->
+    <div class="alert-overlay" id="alert-overlay">
+      <div class="alert-box">
+        <div class="alert-icon" id="alert-icon">⚡</div>
+        <h2 id="alert-title">Message</h2>
+        <p id="alert-message"></p>
+        <button id="alert-button">OK</button>
+      </div>
+    </div>
+
+    <!-- Add this to the <head> section -->
+    <script src="notifications.js"></script>
+
+    <!-- Update the JavaScript section -->
+    <script>
+      // Get the elements from the page
+      const depositForm = document.getElementById("deposit-form");
+      const depositAmountInput = document.getElementById("deposit-amount");
+      const currentBalanceDisplay = document.getElementById("current-balance");
+
+      // Get alert elements
+      const alertOverlay = document.getElementById("alert-overlay");
+      const alertTitle = document.getElementById("alert-title");
+      const alertMessage = document.getElementById("alert-message");
+      const alertButton = document.getElementById("alert-button");
+
+      // Show a custom alert box
+      function showAlert(title, message, callback) {
+        alertTitle.textContent = title;
+        alertMessage.textContent = message;
+        alertOverlay.classList.add("show");
+
+        alertButton.onclick = function () {
+          alertOverlay.classList.remove("show");
+
+          if (callback) {
+            callback();
+          }
+        };
+      }
+
+      // Get the saved balance from localStorage
+      const savedBalance = localStorage.getItem("powerWiseBalance");
+
+      // Use the saved balance or start at zero
+      let balance = savedBalance ? Number(savedBalance) : 0;
+
+      // Display the current balance
+      currentBalanceDisplay.textContent = `₦${balance.toLocaleString()}.00`;
+
+      // Handle the deposit form submission
+      depositForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        // Get the amount entered by the user
+        const depositAmount = Number(depositAmountInput.value);
+
+        // Check if the amount is valid
+        if (depositAmount <= 0 || !depositAmount) {
+          showAlert(
+            "Invalid Amount ⚠️",
+            "Please enter a valid amount greater than zero.",
+          );
+          return;
+        }
+
+        // Add the deposited money to the balance
+        balance = balance + depositAmount;
+
+        // Save the new balance
+        localStorage.setItem("powerWiseBalance", balance);
+
+        // Show the new balance
+        currentBalanceDisplay.textContent = `₦${balance.toLocaleString()}.00`;
+
+        // ✅ ADD NOTIFICATION
+        addNotification(
+          "💰 Deposit Successful",
+          `₦${depositAmount.toLocaleString()} has been added to your balance. New balance: ₦${balance.toLocaleString()}.`,
+          "deposit",
+          "💰",
+        );
+
+        // Show success message with custom alert
+        showAlert(
+          "Deposit Successful! 💰",
+          `₦${depositAmount.toLocaleString()} has been added to your balance.`,
+          function () {
+            // Clear the input
+            depositAmountInput.value = "";
+
+            // Return to the Home page
+            window.location.href = "Home.html";
+          },
+        );
+      });
+    </script>
+  </body>
+</html>
