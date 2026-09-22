@@ -4,114 +4,69 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>PowerWise - Home</title>
-    <link rel="stylesheet" href="Home.css" />
+    <title>Login</title>
+    <link rel="stylesheet" href="Login.css" />
   </head>
 
   <body>
-    <!-- Top navigation -->
-    <header>
-      <div class="brand">
-        <span class="logo">⚡</span>
-        <h1>Apex Electricity</h1>
-      </div>
+    <div class="login-container">
+      <div class="logo">⚡</div>
 
-      <div class="header-icons">
-        <a
-          href="notificationspage.html"
-          class="notification-btn"
-          id="notification-btn"
+      <h1>Apex Electricity</h1>
+
+      <p class="welcome-text"></p>
+
+      <form id="login-form">
+        <div class="input-group">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="Enter your email"
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password</label>
+
+          <div class="password-box">
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              required
+            />
+
+            <button type="button" class="show-password" id="show-password">
+              👁️
+            </button>
+          </div>
+        </div>
+
+        <a href="ForgotPassword.html" class="forgot-password"
+          >Forgot Password?</a
         >
-          🔔
-          <span class="notification-badge" id="notification-badge">0</span>
-        </a>
-        <a href="Profile.html" class="profile-btn">👤</a>
+
+        <button type="submit" class="login-btn">Log In</button>
+      </form>
+
+      <p class="signup-text">
+        Don't have an account?
+        <a href="NewLogin.html">Create Account</a>
+      </p>
+    </div>
+
+    <!-- Custom Alert Box -->
+    <div class="alert-overlay" id="alert-overlay">
+      <div class="alert-box">
+        <div class="alert-icon" id="alert-icon">⚡</div>
+        <h2 id="alert-title">Message</h2>
+        <p id="alert-message"></p>
+        <button id="alert-button">OK</button>
       </div>
-    </header>
+    </div>
 
-    <!-- Main content -->
-    <main>
-      <!-- Welcome section -->
-      <section class="welcome-section">
-        <h2>Welcome, <span id="user-name">User</span>! 👋</h2>
-        <p>Manage your electricity smarter and stay in control.</p>
-      </section>
-
-      <!-- Electricity overview -->
-      <section class="electricity-card">
-        <div class="card-heading">
-          <!-- Balance card on the left -->
-          <div class="balance-card">
-            <span class="balance-label">Available Balance</span>
-
-            <div class="amount-row">
-              <h3 id="wallet-balance">₦0.00</h3>
-              <button class="toggle-balance" data-target="wallet-balance">
-                👁️
-              </button>
-            </div>
-          </div>
-
-          <!-- Add meter button on the right -->
-          <a href="AddMeter.html" class="add-meter-btn">+ Add Meter</a>
-        </div>
-      </section>
-
-      <!-- Quick statistics -->
-      <section class="stats-section">
-        <a href="total.html" class="stat-card">
-          <span class="stat-icon">💰</span>
-
-          <div class="amount-row">
-            <h3 id="total-spent">₦0</h3>
-            <button class="toggle-balance" data-target="total-spent">👁️</button>
-          </div>
-
-          <p>Total Spent</p>
-        </a>
-
-        <a href="Meter.html" class="stat-card meter-button">
-          <span class="stat-icon">⚡</span>
-          <h3 id="meter-count">0</h3>
-          <p>Meters Saved</p>
-        </a>
-      </section>
-
-      <!-- Quick actions -->
-      <section class="quick-actions">
-        <h2>Quick Actions</h2>
-
-        <div class="action-buttons">
-          <a href="buy.html" class="action-btn">
-            ⚡
-            <span>Buy Electricity</span>
-          </a>
-
-          <a href="Track.html" class="action-btn">
-            📊
-            <span>Track Usage</span>
-          </a>
-
-          <a href="Deposit.html" class="action-btn">
-            💰
-            <span>Deposit</span>
-          </a>
-        </div>
-      </section>
-
-      <!-- Budget section -->
-      <section class="quick-actions budget-section">
-        <div class="action-buttons">
-          <a href="Budget.html" class="action-btn budget-btn" id="budget-btn">
-            💰
-            <span>Set Monthly Budget</span>
-          </a>
-        </div>
-      </section>
-    </main>
-
-    <!-- Load notification system -->
-    <script src="notifications.js"></script>
-    <script src="Home.js"></script>
+    <script src="Login.js"></script>
   </body>
 </html>
